@@ -73,6 +73,7 @@ Rolling Snowball 当前主线是一个本地单用户的选股与研究控制台
 - 路径：`frontend-console/`
 - 技术栈：React、TypeScript、Vite、Zustand、Tailwind CSS
 - 作用：承载首页、股票列表、行业看板、任务中心、历史运行、规则实验台和 Run 质量总览等页面
+- 当前界面基线：浅色主导的 Apple 风格研究工作台，统一使用轻卡片系统、克制标题和摘要优先的信息结构；规则实验台采用左编辑右反馈的实验驾驶舱布局
 
 高频入口：
 
@@ -243,6 +244,8 @@ tail -n 50 data/dev-console/backend.log
 ```
 
 如果前端默认端口 `4178` 被占用，Vite 会自动切到其他端口，最终以前端日志输出为准。
+
+也就是说，启动后如果脚本提示端口和页面实际打不开，优先查看 `data/dev-console/frontend.log` 里的 `Local` 地址，不要只信默认端口。
 
 ## 文档索引
 
