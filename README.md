@@ -2,7 +2,7 @@
 
 Rolling Snowball 是一个本地单用户的选股与研究控制台，目标是把“规则实验 -> 发起评分任务 -> 回看历史 run -> 查询股票与行业结果 -> 复盘 run 质量”收成一个可持续迭代的研究工作台。
 
-当前仓库已经包含产品文档、后端服务、前端控制台、数据库脚本、样例数据和历史报告。对于新接手的开发者，最重要的判断是：`frontend-console/`、`src/rolling_snowball/` 和控制台相关脚本是当前主线，其余部分可能是历史模块或沉淀资产。
+当前仓库已经包含产品文档、后端服务、前端控制台、数据库脚本、样例数据和历史报告。对于新接手的开发者，最重要的判断是：`frontend-console/`、`src/rolling_snowball/` 和控制台相关脚本是当前主线，旧版日报链路和股票评估原型已经从仓库中移除。
 
 ## 项目概述
 
@@ -148,7 +148,6 @@ config/                           组合与规则配置
 data/                             本地数据、缓存、样例结果与数据库文件
 docs/                             当前状态、历史模块和规格文档
 tests/                            Python 测试
-stock_evaluation/                 旧版股票评估原型静态资源
 ```
 
 更完整的目录职责和阅读顺序见 [仓库说明文档](docs/repository-guide.md)。
@@ -174,10 +173,10 @@ stock_evaluation/                 旧版股票评估原型静态资源
 
 ## 历史模块说明
 
-仓库中仍保留两类历史资产，它们可以参考，但不应继续作为当前主线的演进基线：
+此前保留过两类历史链路，但已经从当前仓库中清理：
 
-- 紫金日报链路：`src/zijin_daily_report.py`、`src/report_server.py`、`scripts/run_daily_report.sh`
-- 旧版股票评估原型：`src/stock_evaluation_core.py`、`src/stock_evaluation_server.py`、`stock_evaluation/`
+- 紫金日报链路
+- 旧版股票评估原型
 
 如果你当前目标是继续开发选股控制台，请优先进入：
 
@@ -186,6 +185,8 @@ stock_evaluation/                 旧版股票评估原型静态资源
 - `scripts/start_console_stack.sh`
 - `scripts/stop_console_stack.sh`
 - `scripts/run_console_server.py`
+
+如果需要了解这次清理后的历史口径，可以查看 [历史模块说明](docs/legacy-modules.md)。
 
 ## 仓库约定
 

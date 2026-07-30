@@ -14,15 +14,15 @@ Rolling Snowball 当前主线是一个本地单用户的选股与研究控制台
 
 `规则实验 -> 发起评分任务 -> 回看历史 run -> 查询股票与行业结果 -> 复盘 run 质量`
 
-仓库中同时保留了几类内容：
+仓库中当前主要包含几类内容：
 
 - 当前主线代码：前端控制台、后端控制台服务、评分管线和相关脚本
 - 运行依赖与配置：数据库脚本、环境变量模板、规则配置
 - 数据与样例结果：缓存、归档数据、数据库文件、报告文件
-- 历史模块：日报链路和旧版股票评估原型
+- 历史沉淀：报告、专项数据和少量非主线脚本
 - 设计与状态文档：当前状态、规格、计划和历史说明
 
-理解这个仓库时，最重要的是先区分“当前主线”和“历史遗留”，不要把所有目录都当成正在演进的代码。
+理解这个仓库时，最重要的是先区分“当前主线”和“历史沉淀”，不要把所有目录都当成正在演进的代码。
 
 ## 当前主线与历史模块边界
 
@@ -47,26 +47,24 @@ Rolling Snowball 当前主线是一个本地单用户的选股与研究控制台
 - 股票列表、行业看板和个股详情
 - Run 质量复盘
 
-### 历史模块
+### 已移除的历史模块
 
-以下目录或脚本不属于当前主线：
+此前仓库中保留过两条旧链路，但已经在当前版本中移除：
 
 - 紫金日报链路
-  - `src/zijin_daily_report.py`
-  - `src/report_server.py`
-  - `scripts/run_daily_report.sh`
-  - `scripts/run_report_server.sh`
-  - `launchd/com.user.zijin-daily-report.plist.example`
 - 旧版股票评估原型
-  - `src/stock_evaluation_core.py`
-  - `src/stock_evaluation_server.py`
-  - `scripts/run_stock_evaluation_server.sh`
-  - `stock_evaluation/`
-- 其他历史或专项脚本
-  - `scripts/run_international_mining_pipeline.sh`
-  - `scripts/run_stability_test.sh`
 
-这些内容仍保留在仓库中，原因通常是为了追溯旧实现、复用局部逻辑或保留历史数据链路参考。除非你的任务明确涉及它们，否则不要把新功能继续堆到这些入口中。
+因此，如果你在旧文档、旧提交记录或历史讨论里看到 `zijin`、`report_server`、`stock_evaluation` 等命名，应将其理解为已下线的历史实现，而不是当前主线入口。
+
+### 仍保留的历史或专项内容
+
+以下内容不属于当前控制台主线，但仍保留在仓库里：
+
+- `scripts/run_international_mining_pipeline.sh`
+- `data/international_mining/`
+- `reports/` 下的历史报告产物
+
+除非你的任务明确涉及这些资产，否则不要把新功能继续堆到这些入口中。
 
 ## 系统组成
 
@@ -169,7 +167,7 @@ Rolling Snowball 当前主线是一个本地单用户的选股与研究控制台
 - Tushare：提供部分金融数据来源
 - `data/cache/`：本地缓存和中间结果
 - `data/archive/`：归档快照
-- `data/stock_evaluation/`、`data/international_mining/`：历史或专项数据资产
+- `data/international_mining/`：历史或专项数据资产
 
 ## 常用开发路径
 
@@ -261,7 +259,7 @@ tail -n 50 data/dev-console/backend.log
 ## 协作约定
 
 - 默认只在当前主线目录中新增或修改功能
-- 看到 `zijin`、`report_server`、`stock_evaluation` 等命名，先按“历史模块”理解
+- 看到 `zijin`、`report_server`、`stock_evaluation` 等命名，先按“已移除的历史模块”理解
 - `.env`、日志、PID、缓存目录不应提交到仓库
 - `data/dev-console/`、`data/scoring_tasks/` 等运行态目录按忽略规则处理
 - 修改文档时，尽量保持与 `docs/current-console-status.md` 和 `docs/legacy-modules.md` 的口径一致
