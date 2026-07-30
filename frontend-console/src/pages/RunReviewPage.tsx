@@ -59,6 +59,32 @@ function getWarningOutlierMessage(warningCount: number, currentPool: string | nu
   return `已入${poolLabel}，但有 ${warningCount} 个 warning，建议先复核再下判断。`
 }
 
+function getRunVerdict(overview: RunQualityOverview) {
+  const { metrics } = overview
+
+  if (metrics.pass_rate < 0.08) {
+    return {
+      tone: 'rose' as const,
+      title: '这次 run 偏紧',
+      description: '通过率明显偏低，优先回看硬过滤阈值和异常 warning 是否放大了筛除范围。',
+    }
+  }
+
+  if (metrics.pass_rate > 0.35 || metrics.warning_stock_rate > 0.35) {
+    return {
+      tone: 'amber' as const,
+      title: '这次 run 需要复核',
+      description: '通过率或 warning 覆盖偏高，建议先确认是否放入了过多边缘样本。',
+    }
+  }
+
+  return {
+    tone: 'emerald' as const,
+    title: '这次 run 基本可控',
+    description: '可以先沿着高分样本和行业分布继续下钻，再决定是否需要重跑规则。',
+  }
+}
+
 export default function RunReviewPage() {
   const [searchParams] = useSearchParams()
   const runIdFromQuery = searchParams.get('run')
@@ -95,6 +121,7 @@ export default function RunReviewPage() {
   }, [runIdFromQuery])
 
   const highlights = useMemo(() => (overview ? getReviewHighlights(overview) : []), [overview])
+  const verdict = useMemo(() => (overview ? getRunVerdict(overview) : null), [overview])
   const activeRunId = overview?.run_summary.run_id || runIdFromQuery
 
   return (
@@ -106,14 +133,14 @@ export default function RunReviewPage() {
           <RunSwitcher currentRunId={activeRunId || null} />
           <Link
             to="/runs"
-            className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
+            className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
           >
             返回历史运行
           </Link>
           {activeRunId ? (
             <Link
               to={`/stocks?${createSearchParams({ run: activeRunId }).toString()}`}
-              className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300/40 hover:bg-cyan-300/15"
+              className="inline-flex rounded-full border border-slate-900 bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
             >
               查看股票列表
             </Link>
@@ -125,20 +152,20 @@ export default function RunReviewPage() {
         <div className="grid gap-6">
           <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="h-28 animate-pulse rounded-[24px] bg-white/[0.05]" />
+              <div key={index} className="h-28 animate-pulse rounded-[24px] bg-slate-100" />
             ))}
           </div>
           <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-            <div className="h-[320px] animate-pulse rounded-[28px] bg-white/[0.05]" />
-            <div className="h-[320px] animate-pulse rounded-[28px] bg-white/[0.05]" />
+            <div className="h-[320px] animate-pulse rounded-[28px] bg-slate-100" />
+            <div className="h-[320px] animate-pulse rounded-[28px] bg-slate-100" />
           </div>
         </div>
       ) : error ? (
         <Panel eyebrow="质量总览" title="暂时无法读取这次 run 的复盘结果">
-          <div className="rounded-[22px] border border-rose-400/20 bg-rose-400/10 p-5 text-sm text-rose-100">{error}</div>
+          <div className="rounded-[22px] border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">{error}</div>
         </Panel>
       ) : overview ? (
-        <>
+        <div className="grid gap-6">
           <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
             <MetricTile label="run_id" value={overview.run_summary.run_id.slice(0, 8)} hint={formatDateTime(overview.run_summary.finished_at)} />
             <MetricTile label="总样本" value={String(overview.metrics.total_stocks)} hint={`平均总分 ${formatScore(overview.metrics.avg_total_score)}`} />
@@ -148,67 +175,81 @@ export default function RunReviewPage() {
             <MetricTile
               label="平均 warning 数"
               value={formatScore(overview.metrics.avg_warning_tags_per_stock)}
-              hint={`manual_review ${overview.metrics.manual_review_count} · data_missing ${overview.metrics.data_missing_count}`}
+              hint={`人工复核 ${overview.metrics.manual_review_count} · 数据缺口 ${overview.metrics.data_missing_count}`}
             />
           </div>
 
-          <div className="mt-6 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-            <Panel eyebrow="复盘结论" title={`先看这次 run 有没有跑偏 · ${overview.run_summary.run_id}`}>
-              <div className="flex flex-wrap gap-2">
-                <StatusPill tone={overview.run_summary.run_status === 'success' ? 'emerald' : overview.run_summary.run_status === 'failed' ? 'rose' : 'amber'}>
-                  {overview.run_summary.run_status}
-                </StatusPill>
-                <StatusPill tone="slate">规则 {overview.run_summary.rule_version}</StatusPill>
-                <StatusPill tone="cyan">数据 {overview.run_summary.data_version}</StatusPill>
+          <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+            <Panel eyebrow="Review Summary" title="先判断这次 run 有没有跑偏">
+              <div className="rounded-[24px] border border-slate-200/70 bg-slate-50/85 p-5">
+                <div className="flex flex-wrap gap-2">
+                  <StatusPill tone={verdict?.tone || 'slate'}>{verdict?.title || '等待结论'}</StatusPill>
+                  <StatusPill tone={overview.run_summary.run_status === 'success' ? 'emerald' : overview.run_summary.run_status === 'failed' ? 'rose' : 'amber'}>
+                    {overview.run_summary.run_status}
+                  </StatusPill>
+                  <StatusPill tone="slate">规则 {overview.run_summary.rule_version}</StatusPill>
+                  <StatusPill tone="cyan">数据 {overview.run_summary.data_version}</StatusPill>
+                </div>
+                <p className="mt-4 text-sm leading-7 text-slate-600">{verdict?.description}</p>
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  <div className="rounded-[20px] border border-white/80 bg-white/90 px-4 py-3 text-sm text-slate-600">
+                    run_id：{overview.run_summary.run_id}
+                  </div>
+                  <div className="rounded-[20px] border border-white/80 bg-white/90 px-4 py-3 text-sm text-slate-600">
+                    完成时间：{formatDateTime(overview.run_summary.finished_at)}
+                  </div>
+                </div>
               </div>
 
               <div className="mt-5 space-y-3">
                 {highlights.map((item) => (
-                  <div key={item} className="rounded-[20px] border border-white/10 bg-white/[0.03] p-4 text-sm leading-7 text-slate-300">
+                  <div key={item} className="rounded-[20px] border border-slate-200/70 bg-slate-50/80 p-4 text-sm leading-7 text-slate-600">
                     {item}
                   </div>
                 ))}
               </div>
             </Panel>
 
-            <Panel eyebrow="Warning 分布" title="最常见的人工复核信号">
+            <Panel eyebrow="Warning Distribution" title="最常见的人工复核信号">
               {overview.top_warning_tags.length > 0 ? (
                 <div className="space-y-3">
                   {overview.top_warning_tags.map((item) => (
                     <div
                       key={item.warning_tag}
-                      className="flex items-center justify-between rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3"
+                      className="flex items-center justify-between rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-4"
                     >
                       <div>
-                        <p className="text-sm font-semibold text-white">{item.warning_tag}</p>
-                        <p className="mt-1 text-xs text-slate-500">命中股票数</p>
+                        <p className="text-sm font-semibold text-slate-900">{presentWarningLabel(item.warning_tag)}</p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          覆盖率 {formatPercent(item.stock_count / Math.max(overview.metrics.total_stocks, 1))}
+                        </p>
                       </div>
                       <StatusPill tone="amber">{item.stock_count}</StatusPill>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="rounded-[22px] border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm leading-7 text-slate-400">
+                <div className="rounded-[22px] border border-dashed border-slate-200 bg-slate-50/70 p-6 text-sm leading-7 text-slate-500">
                   这次 run 没有 warning 标签，说明当前样本在预警维度上比较干净。
                 </div>
               )}
             </Panel>
           </div>
 
-          <div className="mt-6">
-            <Panel eyebrow="异常样本" title="高分但 warning 多">
+          <div className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+            <Panel eyebrow="Outliers" title="高分但 warning 多">
               {overview.warning_outliers.length > 0 ? (
                 <div className="space-y-4">
                   {overview.warning_outliers.map((item) => (
-                    <div key={item.ts_code} className="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
+                    <div key={item.ts_code} className="rounded-[24px] border border-slate-200/70 bg-slate-50/80 p-5">
                       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div>
                           <div className="flex flex-wrap items-center gap-2">
-                            <p className="text-base font-semibold text-white">{item.stock_name}</p>
+                            <p className="text-base font-semibold text-slate-900">{item.stock_name}</p>
                             <StatusPill tone="slate">{item.ts_code}</StatusPill>
                             <StatusPill tone="cyan">{item.sw_level1_industry}</StatusPill>
                           </div>
-                          <p className="mt-3 text-sm leading-7 text-slate-300">{getWarningOutlierMessage(item.warning_count, item.current_pool)}</p>
+                          <p className="mt-3 text-sm leading-7 text-slate-600">{getWarningOutlierMessage(item.warning_count, item.current_pool)}</p>
                           <div className="mt-3 flex flex-wrap gap-2">
                             <StatusPill tone="amber">{item.current_pool || '观察池'}</StatusPill>
                             <StatusPill tone="slate">总分 {formatScore(item.total_score)}</StatusPill>
@@ -228,7 +269,7 @@ export default function RunReviewPage() {
                             pathname: `/stocks/${item.ts_code}`,
                             search: createSearchParams({ run: overview.run_summary.run_id }).toString(),
                           }}
-                          className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300/40 hover:bg-cyan-300/15"
+                          className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                         >
                           查看个股详情
                         </Link>
@@ -237,52 +278,41 @@ export default function RunReviewPage() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-[22px] border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm leading-7 text-slate-400">
+                <div className="rounded-[22px] border border-dashed border-slate-200 bg-slate-50/70 p-6 text-sm leading-7 text-slate-500">
                   当前没有“高分但 warning 多”的样本，这次 run 的高分股票相对更干净。
                 </div>
               )}
             </Panel>
-          </div>
 
-          <div className="mt-6">
-            <Panel eyebrow="行业分布" title="哪些行业拿走了更多通过样本与重点池名额">
+            <Panel eyebrow="Industry View" title="行业分布先看哪里值得继续追">
               {overview.industries.length > 0 ? (
-                <div className="overflow-hidden rounded-[24px] border border-white/10">
-                  <table className="min-w-full divide-y divide-white/10 text-left text-sm">
-                    <thead className="bg-white/[0.03] text-slate-400">
-                      <tr>
-                        <th className="px-4 py-3 font-medium">申万一级行业</th>
-                        <th className="px-4 py-3 font-medium">总样本</th>
-                        <th className="px-4 py-3 font-medium">通过数</th>
-                        <th className="px-4 py-3 font-medium">重点池</th>
-                        <th className="px-4 py-3 font-medium">观察池</th>
-                        <th className="px-4 py-3 font-medium">warning 覆盖</th>
-                        <th className="px-4 py-3 font-medium">平均总分</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/10">
-                      {overview.industries.map((industry) => (
-                        <tr key={industry.sw_level1_industry} className="bg-slate-950/30">
-                          <td className="px-4 py-3 font-semibold text-white">{industry.sw_level1_industry}</td>
-                          <td className="px-4 py-3 text-slate-300">{industry.stock_count}</td>
-                          <td className="px-4 py-3 text-slate-300">{industry.passed_count}</td>
-                          <td className="px-4 py-3 text-slate-300">{industry.key_watch_count}</td>
-                          <td className="px-4 py-3 text-slate-300">{industry.watch_count}</td>
-                          <td className="px-4 py-3 text-slate-300">{formatPercent(getIndustryWarningRate(industry))}</td>
-                          <td className="px-4 py-3 text-slate-300">{formatScore(industry.avg_total_score)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="space-y-3">
+                  {overview.industries.map((industry) => (
+                    <div key={industry.sw_level1_industry} className="rounded-[22px] border border-slate-200/70 bg-slate-50/80 p-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">{industry.sw_level1_industry}</p>
+                          <p className="mt-2 text-sm text-slate-600">
+                            通过 {industry.passed_count}/{industry.stock_count}，重点池 {industry.key_watch_count}，warning 覆盖{' '}
+                            {formatPercent(getIndustryWarningRate(industry))}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">平均总分</p>
+                          <p className="mt-2 font-serif text-2xl text-slate-950">{formatScore(industry.avg_total_score)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
-                <div className="rounded-[22px] border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm leading-7 text-slate-400">
+                <div className="rounded-[22px] border border-dashed border-slate-200 bg-slate-50/70 p-6 text-sm leading-7 text-slate-500">
                   当前没有行业分布数据，通常说明这次 run 还没有完整股票结果落库。
                 </div>
               )}
             </Panel>
           </div>
-        </>
+        </div>
       ) : null}
     </AppShell>
   )

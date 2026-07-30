@@ -117,8 +117,9 @@ describe('RunReviewPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Run 质量总览')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: '先判断这次 run 有没有跑偏' })).toBeInTheDocument()
       expect(screen.getByText('最常见的人工复核信号')).toBeInTheDocument()
-      expect(screen.getByText('manual_review')).toBeInTheDocument()
+      expect(screen.getAllByText('人工复核').length).toBeGreaterThan(0)
       expect(screen.getByText('高分但 warning 多')).toBeInTheDocument()
       expect(screen.getByText('美的集团')).toBeInTheDocument()
       expect(screen.getByText('已入重点观察池，但有 3 个 warning，建议先复核再下判断。')).toBeInTheDocument()

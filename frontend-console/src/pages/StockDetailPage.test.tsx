@@ -104,6 +104,8 @@ describe('StockDetailPage', () => {
     )
 
     await waitFor(() => {
+      expect(screen.getByText('总分')).toBeInTheDocument()
+      expect(screen.getAllByText(/当前池子|已过滤/).length).toBeGreaterThan(0)
       expect(screen.getByRole('heading', { name: '为什么在这里' })).toBeInTheDocument()
       expect(screen.getByRole('heading', { name: '硬过滤、预警与研究提示' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: '返回股票列表' })).toHaveAttribute('href', '/stocks?run=run-demo-001&industry=%E5%AE%B6%E7%94%A8%E7%94%B5%E5%99%A8')

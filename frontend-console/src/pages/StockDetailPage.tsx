@@ -70,6 +70,15 @@ function formatMetricValue(mode: 'percent' | 'number', value: number | null | un
   return mode === 'percent' ? formatPercent(value) : formatScore(value, 2)
 }
 
+function getDetailSummary(detail: StockDetail) {
+  if (detail.is_filtered) {
+    return '这只股票本次没有通过硬过滤，更适合先看过滤原因和 warning，再判断是规则过严还是个股本身风险偏高。'
+  }
+
+  const poolLabel = detail.current_pool || '观察池'
+  return `这只股票当前位于${poolLabel}，可以先用总分、行业位置和 warning 判断结论是否站得住，再继续下钻维度与财报口径。`
+}
+
 export default function StockDetailPage() {
   const { tsCode = '' } = useParams()
   const [searchParams] = useSearchParams()
@@ -147,13 +156,13 @@ export default function StockDetailPage() {
         <>
           <Link
             to={{ pathname: '/stocks', search: stockListBackSearch }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
           >
             返回股票列表
           </Link>
           <Link
             to={{ pathname: '/industries', search: industryBoardSearch }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
           >
             返回行业看板
           </Link>
@@ -161,44 +170,63 @@ export default function StockDetailPage() {
       }
     >
       {loading ? (
-        <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          {Array.from({ length: 2 }).map((_, index) => (
-            <div key={index} className="h-[420px] animate-pulse rounded-[30px] bg-white/[0.05]" />
+        <div className="grid gap-6">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="h-[280px] animate-pulse rounded-[28px] bg-slate-100" />
           ))}
         </div>
       ) : error || !detail ? (
         <Panel eyebrow="加载失败" title="暂时无法读取股票详情">
-          <div className="rounded-[22px] border border-rose-400/20 bg-rose-400/10 p-5 text-sm text-rose-100">{error || '结果不存在'}</div>
+          <div className="rounded-[22px] border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">{error || '结果不存在'}</div>
         </Panel>
       ) : (
-        <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="space-y-6">
-            <Panel eyebrow={detail.ts_code} title={detail.stock_name}>
-              <div className="grid gap-4 lg:grid-cols-2">
+        <div className="space-y-6">
+          <Panel eyebrow={detail.ts_code} title={detail.stock_name}>
+            <div className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+              <div>
+                <div className="flex flex-wrap gap-2">
+                  <StatusPill tone={detail.is_filtered ? 'rose' : 'emerald'}>{detail.is_filtered ? '已过滤' : detail.current_pool || '观察池'}</StatusPill>
+                  <StatusPill tone="slate">{detail.sw_level1_industry}</StatusPill>
+                  {(detail.warning_tags || []).slice(0, 3).map((tag) => (
+                    <StatusPill key={tag} tone="slate">
+                      {presentRuleLabel(tag)}
+                    </StatusPill>
+                  ))}
+                </div>
+                <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">{getDetailSummary(detail)}</p>
+                <div className="mt-6 rounded-[24px] border border-slate-200/70 bg-slate-50/85 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">先看结论</p>
+                  <div className="mt-4 space-y-3 text-sm leading-7 text-slate-600">
+                    <p>先确认总分与行业位置，判断它是否属于这次 run 里值得优先研究的高分样本。</p>
+                    <p>再看当前池子和 warning，分辨它是“高分合理”还是“需要人工复核”的结果。</p>
+                    <p>最后再回到硬过滤原因、一级维度和原始指标，判断要不要继续追踪或回头调规则。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
                 <MetricTile label="总分" value={formatScore(detail.total_score)} hint={`全市场排名 ${detail.global_rank || '--'}`} />
+                <MetricTile
+                  label="当前池子"
+                  value={detail.is_filtered ? '已过滤' : detail.current_pool || '观察池'}
+                  hint={detail.is_filtered ? '本次未通过硬过滤' : '当前研究优先级'}
+                />
                 <MetricTile
                   label="行业排名"
                   value={detail.industry_rank && detail.industry_total ? `${detail.industry_rank}/${detail.industry_total}` : '--'}
                   hint={detail.sw_level1_industry}
                 />
+                <MetricTile
+                  label="warning 数量"
+                  value={String((detail.warning_tags || []).length)}
+                  hint={(detail.warning_tags || []).length > 0 ? '建议先复核再下判断' : '当前没有 warning 标签'}
+                />
               </div>
-              <div className="mt-5 flex flex-wrap gap-2">
-                <StatusPill tone={detail.is_filtered ? 'rose' : 'emerald'}>{detail.is_filtered ? '已过滤' : detail.current_pool || '观察池'}</StatusPill>
-                <StatusPill tone="slate">{detail.sw_level1_industry}</StatusPill>
-                {(detail.warning_tags || []).map((tag) => (
-                  <StatusPill key={tag} tone="slate">
-                    {presentRuleLabel(tag)}
-                  </StatusPill>
-                ))}
-              </div>
-              <div className="mt-5 rounded-[22px] border border-white/10 bg-white/[0.03] p-4 text-sm leading-7 text-slate-300">
-                {detail.is_filtered
-                  ? '这只股票本次没有通过硬过滤，当前详情更适合用来理解它被拦下的原因。'
-                  : `这只股票当前位于${detail.current_pool || '观察池'}，可以结合四个一级维度和同行对比判断它是“高分合理”还是“结果待复核”。`}
-              </div>
-            </Panel>
+            </div>
+          </Panel>
 
-            <Panel eyebrow="四个一级维度" title="为什么在这里">
+          <div className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+            <Panel eyebrow="Dimensions" title="为什么在这里">
               <div className="grid gap-4 md:grid-cols-2">
                 {dimensionTiles.map(([label, value, description]) => (
                   <MetricTile key={label} label={label} value={value} hint={description} />
@@ -206,10 +234,65 @@ export default function StockDetailPage() {
               </div>
             </Panel>
 
-            <Panel eyebrow="规则判断" title="硬过滤、预警与研究提示">
+            <Panel eyebrow="Peer Context" title="同行参考">
+              <div className="rounded-[24px] border border-sky-200 bg-sky-50/70 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">当前股票</p>
+                <div className="mt-3 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-base font-semibold text-slate-950">{detail.stock_name}</p>
+                    <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-500">
+                      {detail.ts_code} · 行业排名 {detail.industry_rank && detail.industry_total ? `${detail.industry_rank}/${detail.industry_total}` : '--'}
+                    </p>
+                  </div>
+                  <p className="font-serif text-3xl text-slate-950">{formatScore(detail.total_score)}</p>
+                </div>
+              </div>
+              <div className="mt-4 space-y-3">
+                {(peers?.peers || []).length > 0 ? (
+                  peers?.peers.map((peer) => (
+                    <div key={peer.ts_code} className="rounded-[22px] border border-slate-200/70 bg-slate-50/80 p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="font-semibold text-slate-900">{peer.stock_name}</p>
+                            <StatusPill tone={peer.current_pool === '重点观察池' ? 'emerald' : 'slate'}>{peer.current_pool || '观察池'}</StatusPill>
+                          </div>
+                          <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-500">
+                            {peer.ts_code} · 行业排名 {peer.industry_rank || '--'}
+                          </p>
+                          <div className="mt-3 grid gap-2 text-xs text-slate-600 md:grid-cols-2">
+                            <span>业务质量 {formatScore(peer.biz_quality_score)}</span>
+                            <span>成长兑现 {formatScore(peer.growth_delivery_score)}</span>
+                            <span>财务质量 {formatScore(peer.financial_quality_score)}</span>
+                            <span>估值匹配 {formatScore(peer.valuation_fit_score)}</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-serif text-2xl text-slate-950">{formatScore(peer.total_score)}</p>
+                          <Link
+                            to={{ pathname: `/stocks/${peer.ts_code}`, search: createSearchParams({ run: detail.run_id }).toString() }}
+                            className="mt-2 inline-flex text-xs font-semibold text-slate-700 transition hover:text-slate-950"
+                          >
+                            查看详情
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="rounded-[22px] border border-dashed border-slate-200 bg-slate-50/70 p-6 text-sm leading-7 text-slate-500">
+                    当前没有可比较的同行业样本，可以先以一级维度和规则判断为主。
+                  </div>
+                )}
+              </div>
+            </Panel>
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+            <Panel eyebrow="Rules" title="硬过滤、预警与研究提示">
               <div className="grid gap-4 md:grid-cols-2">
-                <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs uppercase tracking-[0.22em] text-slate-500">硬过滤结果</p>
+                <div className="rounded-[22px] border border-slate-200/70 bg-slate-50/80 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">硬过滤结果</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <StatusPill tone={detail.is_filtered ? 'rose' : 'emerald'}>{detail.is_filtered ? '未通过' : '已通过'}</StatusPill>
                   </div>
@@ -221,12 +304,13 @@ export default function StockDetailPage() {
                         </StatusPill>
                       ))
                     ) : (
-                      <p className="text-sm text-slate-400">没有触发硬过滤原因。</p>
+                      <p className="text-sm text-slate-600">没有触发硬过滤原因。</p>
                     )}
                   </div>
                 </div>
-                <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs uppercase tracking-[0.22em] text-slate-500">预警与辅助信息</p>
+
+                <div className="rounded-[22px] border border-slate-200/70 bg-slate-50/80 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">预警与辅助信息</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {(detail.warning_tags || []).length > 0 ? (
                       detail.warning_tags?.map((tag) => (
@@ -235,10 +319,10 @@ export default function StockDetailPage() {
                         </StatusPill>
                       ))
                     ) : (
-                      <p className="text-sm text-slate-400">当前没有 warning 标签。</p>
+                      <p className="text-sm text-slate-600">当前没有 warning 标签。</p>
                     )}
                   </div>
-                  <div className="mt-4 space-y-2 text-sm text-slate-400">
+                  <div className="mt-4 space-y-2 text-sm text-slate-600">
                     <p>最新报告期：{detail.latest_report_period || '--'}</p>
                     <p>审计意见：{detail.audit_opinion || '--'}</p>
                     <p>所属市场：{detail.market || '--'}</p>
@@ -247,7 +331,7 @@ export default function StockDetailPage() {
               </div>
             </Panel>
 
-            <Panel eyebrow="原始指标" title="二级指标与财报口径">
+            <Panel eyebrow="Metrics" title="二级指标与财报口径">
               <div className="space-y-5">
                 {metricGroups.map((group) => (
                   <div key={group.title}>
@@ -256,9 +340,9 @@ export default function StockDetailPage() {
                     </div>
                     <div className="space-y-3">
                       {group.items.map(([label, key, mode]) => (
-                        <div key={key} className="flex items-center justify-between rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3">
-                          <span className="text-sm text-slate-300">{label}</span>
-                          <span className="font-semibold text-white">
+                        <div key={key} className="flex items-center justify-between rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                          <span className="text-sm text-slate-700">{label}</span>
+                          <span className="font-semibold text-slate-950">
                             {formatMetricValue(mode, detail[key as keyof StockDetail] as number | null | undefined)}
                           </span>
                         </div>
@@ -270,64 +354,15 @@ export default function StockDetailPage() {
             </Panel>
           </div>
 
-          <div className="space-y-6">
-            <Panel eyebrow="运行上下文" title="本次结果来源">
-              <div className="space-y-3 text-sm text-slate-300">
-                <div className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3">run_id：{detail.run_id}</div>
-                <div className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3">rule_version：{detail.rule_version || '--'}</div>
-                <div className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3">data_version：{detail.data_version || '--'}</div>
-                <div className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3">latest_report_period：{detail.latest_report_period || '--'}</div>
-                <div className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3">audit_opinion：{detail.audit_opinion || '--'}</div>
-              </div>
-            </Panel>
-
-            <Panel eyebrow="同行业对比" title={detail.sw_level1_industry}>
-              <div className="mb-4 rounded-[22px] border border-cyan-300/20 bg-cyan-300/[0.06] p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/70">当前股票</p>
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-semibold text-white">{detail.stock_name}</p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-400">
-                      {detail.ts_code} · 行业排名 {detail.industry_rank && detail.industry_total ? `${detail.industry_rank}/${detail.industry_total}` : '--'}
-                    </p>
-                  </div>
-                  <p className="font-serif text-2xl text-white">{formatScore(detail.total_score)}</p>
-                </div>
-              </div>
-              <div className="space-y-3">
-                {(peers?.peers || []).map((peer) => (
-                  <div key={peer.ts_code} className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-semibold text-white">{peer.stock_name}</p>
-                          <StatusPill tone={peer.current_pool === '重点观察池' ? 'emerald' : 'slate'}>{peer.current_pool || '观察池'}</StatusPill>
-                        </div>
-                        <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-500">
-                          {peer.ts_code} · 行业排名 {peer.industry_rank || '--'}
-                        </p>
-                        <div className="mt-3 grid gap-2 text-xs text-slate-400 md:grid-cols-2">
-                          <span>业务质量 {formatScore(peer.biz_quality_score)}</span>
-                          <span>成长兑现 {formatScore(peer.growth_delivery_score)}</span>
-                          <span>财务质量 {formatScore(peer.financial_quality_score)}</span>
-                          <span>估值匹配 {formatScore(peer.valuation_fit_score)}</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-serif text-2xl text-white">{formatScore(peer.total_score)}</p>
-                        <Link
-                          to={{ pathname: `/stocks/${peer.ts_code}`, search: createSearchParams({ run: detail.run_id }).toString() }}
-                          className="mt-2 inline-flex text-xs font-semibold text-cyan-200 transition hover:text-cyan-100"
-                        >
-                          查看详情
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Panel>
-          </div>
+          <Panel eyebrow="Run Context" title="本次结果来源">
+            <div className="grid gap-3 text-sm text-slate-600 md:grid-cols-2 xl:grid-cols-5">
+              <div className="rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-3">run_id：{detail.run_id}</div>
+              <div className="rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-3">rule_version：{detail.rule_version || '--'}</div>
+              <div className="rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-3">data_version：{detail.data_version || '--'}</div>
+              <div className="rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-3">latest_report_period：{detail.latest_report_period || '--'}</div>
+              <div className="rounded-[20px] border border-slate-200/70 bg-slate-50/80 px-4 py-3">audit_opinion：{detail.audit_opinion || '--'}</div>
+            </div>
+          </Panel>
         </div>
       )}
     </AppShell>
