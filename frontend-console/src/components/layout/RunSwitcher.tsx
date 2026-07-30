@@ -83,19 +83,19 @@ export function RunSwitcher({ currentRunId }: RunSwitcherProps) {
   }
 
   return (
-    <label className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-slate-300">
-      <span className="text-xs uppercase tracking-[0.22em] text-slate-500">Run</span>
+    <label className="flex items-center gap-3 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-sm text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.06)]">
+      <span className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Run</span>
       <select
         value={currentRunId || ''}
         onChange={(event) => handleChange(event.target.value)}
         disabled={loading || options.length === 0}
-        className="min-w-[220px] bg-transparent text-sm font-medium text-white outline-none disabled:text-slate-500"
+        className="min-w-[220px] bg-transparent text-sm font-medium text-slate-900 outline-none disabled:text-slate-400"
       >
-        <option value="" className="bg-slate-950 text-white">
+        <option value="" className="bg-white text-slate-900">
           {loading ? '读取 run 列表中…' : '选择 run'}
         </option>
         {options.map((run) => (
-          <option key={run.run_id} value={run.run_id} className="bg-slate-950 text-white">
+          <option key={run.run_id} value={run.run_id} className="bg-white text-slate-900">
             {formatRunLabel(run)}
           </option>
         ))}

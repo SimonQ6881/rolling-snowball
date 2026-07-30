@@ -8,8 +8,8 @@
   font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: rgba(226, 232, 240, 1);
-  background: #09131f;
+  color: #0f172a;
+  background: #f5f7fb;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -19,11 +19,12 @@
 
 @layer base {
   * {
-    @apply border-slate-800;
+    @apply border-slate-200;
   }
 
   body {
-    @apply m-0 min-h-screen bg-[#09131f] text-slate-100;
+    @apply m-0 min-h-screen bg-[#f5f7fb] text-slate-900;
+    background-image: linear-gradient(180deg, #f8fafc 0%, #eef2f7 48%, #f8fafc 100%);
   }
 
   #root {

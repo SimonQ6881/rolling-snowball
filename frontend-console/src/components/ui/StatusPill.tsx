@@ -6,11 +6,11 @@ type StatusPillProps = {
 }
 
 const toneClassMap = {
-  emerald: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200',
-  amber: 'border-amber-400/30 bg-amber-400/10 text-amber-200',
-  slate: 'border-white/10 bg-white/5 text-slate-200',
-  rose: 'border-rose-400/30 bg-rose-400/10 text-rose-200',
-  cyan: 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200',
+  emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  amber: 'border-amber-200 bg-amber-50 text-amber-700',
+  slate: 'border-slate-200 bg-slate-100 text-slate-700',
+  rose: 'border-rose-200 bg-rose-50 text-rose-700',
+  cyan: 'border-sky-200 bg-sky-50 text-sky-700',
 }
 
 export function StatusPill({ tone = 'slate', children }: StatusPillProps) {
