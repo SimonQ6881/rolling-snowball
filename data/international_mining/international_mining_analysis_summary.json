@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-07-06 15:24:39",
+  "raw_record_count": 26,
+  "deduplicated_record_count": 26,
+  "unique_company_count": 18,
+  "countries_covered": 7,
+  "commodity_types": 3,
+  "status_distribution": {
+    "部分披露": 19,
+    "三年量化": 7
+  },
+  "operating_stage_distribution": {
+    "投产爬坡": 10,
+    "开发建设": 8,
+    "待识别": 4,
+    "成熟运营": 3,
+    "维护收缩": 1
+  },
+  "competition_metrics": {
+    "铜-copper_kt": {
+      "company_count": 8,
+      "total_value": 4296.0924,
+      "cr3": 63.08,
+      "hhi": 1694.67
+    },
+    "锂-lithium_lce_kt": {
+      "company_count": 2,
+      "total_value": 182.5,
+      "cr3": 100.0,
+      "hhi": 5496.34
+    },
+    "锂-lithium_spodumene_kt": {
+      "company_count": 1,
+      "total_value": 680.0,
+      "cr3": 100.0,
+      "hhi": 10000.0
+    },
+    "黄金-gold_tonnes": {
+      "company_count": 8,
+      "total_value": 567.8664,
+      "cr3": 66.14,
+      "hhi": 1960.1
+    }
+  },
+  "competition_table_keys": [
+    "铜-copper_kt",
+    "锂-lithium_lce_kt",
+    "锂-lithium_spodumene_kt",
+    "黄金-gold_tonnes"
+  ],
+  "output_files": {
+    "inventory_csv": "data/international_mining/raw_data_inventory.csv",
+    "company_csv": "data/international_mining/standardized_company_dimensions.csv",
+    "production_csv": "data/international_mining/standardized_production_guidance.csv",
+    "database": "data/international_mining/international_mining_companies.db",
+    "report_md": "reports/international_mining/国际矿企多维分析报告.md",
+    "usage_md": "reports/international_mining/国际矿企数据库使用说明.md"
+  }
+}

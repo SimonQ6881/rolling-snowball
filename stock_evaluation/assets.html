@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据资产中心</title>
+  <link rel="stylesheet" href="/stock_evaluation/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav-tabs">
+      <a href="/stock-evaluation/index.html">评估工作台</a>
+      <a class="active" href="/stock-evaluation/assets.html">数据资产中心</a>
+    </nav>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <span class="eyebrow">Data Asset Center</span>
+          <h1 class="page-title">把每次评估沉淀成可复用的数据资产</h1>
+          <p>这里聚合历史结果、分组、导出与二次分析入口，用于后续 SQL、Python 或 AI 调用。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="asset-grid" style="margin-top:24px;">
+      <aside class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>自选分组</h2>
+            <p>围绕研究主题创建自己的观察池。</p>
+          </div>
+        </div>
+        <input id="group-name" placeholder="分组名称，例如 高股息池">
+        <textarea id="group-memo" style="margin-top:12px;" placeholder="补充分组说明，例如 现金流稳定、估值低位。"></textarea>
+        <div class="form-grid" style="margin-top:12px;">
+          <div></div>
+          <button id="save-group-btn" class="primary-btn" type="button">新建分组</button>
+          <div></div>
+        </div>
+        <div id="group-list" class="list" style="margin-top:16px;"></div>
+      </aside>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>历史评估列表</h2>
+            <p>支持按代码、评级、行业筛选，并导出评估数据集。</p>
+          </div>
+          <div class="badge-row">
+            <button class="ghost-btn" id="export-btn" type="button">导出 CSV</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <input id="filter-symbol" placeholder="股票代码">
+          <select id="filter-rating">
+            <option value="">全部评级</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+          <input id="filter-industry" placeholder="行业">
+          <input value="evaluations" disabled>
+          <button class="primary-btn" id="filter-btn" type="button">应用筛选</button>
+        </div>
+        <div id="asset-list" class="list"></div>
+        <div class="footer-note">当前 MVP 支持 `evaluations.csv` 导出；Parquet 与更宽的分析视图将在后续版本补齐。</div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="/stock_evaluation/assets.js"></script>
+</body>
+</html>

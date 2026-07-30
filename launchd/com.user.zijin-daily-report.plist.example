@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.user.zijin-daily-report</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>/Users/user/Documents/personal/rolling-snowball/scripts/run_daily_report.sh</string>
+      <string>--mode</string>
+      <string>scheduled</string>
+    </array>
+
+    <key>StartInterval</key>
+    <integer>3600</integer>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/user/Documents/personal/rolling-snowball</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/user/Documents/personal/rolling-snowball/reports/launchd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/user/Documents/personal/rolling-snowball/reports/launchd.stderr.log</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+  </dict>
+</plist>

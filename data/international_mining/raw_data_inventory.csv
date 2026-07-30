@@ -1,0 +1,2 @@
+﻿dataset_name,dataset_path,record_count,deduplicated_record_count,unique_company_count,countries_covered,commodity_types,update_frequency,source_type,notes
+commodity_supply_plans,data/cache/commodity_supply_plans.json,26,26,18,7,3,按公司财报/运营更新节奏手动维护，可按月重跑,企业官网/年报/季报/技术报告/项目公告,当前项目中的国际矿企事实库主文件

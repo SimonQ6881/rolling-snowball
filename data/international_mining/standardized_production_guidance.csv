@@ -1,0 +1,79 @@
+﻿record_id,company,commodity,commodity_label,year,raw_text,disclosed,comparable,basis,display_unit,standardized_unit,value_min,value_max,value_mid
+15,Antofagasta,copper,铜,2026,650-700 kt,1,1,copper_kt,kt,kt,650.0,700.0,675.0
+15,Antofagasta,copper,铜,2027,未单列披露,0,0,,,,,,
+15,Antofagasta,copper,铜,2028,未单列披露,0,0,,,,,,
+7,Barrick,copper,铜,2026,190-220 kt,1,1,copper_kt,kt,kt,190.0,220.0,205.0
+7,Barrick,copper,铜,2027,未单列披露,0,0,,,,,,
+7,Barrick,copper,铜,2028,未单列披露,0,0,,,,,,
+10,Freeport-McMoRan,copper,铜,2026,1.0 bn lb,1,1,copper_kt,bn lb,kt,453.59237,453.59237,453.59237
+10,Freeport-McMoRan,copper,铜,2027,约 1.6 bn lb,1,1,copper_kt,bn lb,kt,725.7477920000001,725.7477920000001,725.7477920000001
+10,Freeport-McMoRan,copper,铜,2028,约 1.6 bn lb,1,1,copper_kt,bn lb,kt,725.7477920000001,725.7477920000001,725.7477920000001
+12,Ivanhoe Mines,copper,铜,2026,290-330 kt,1,1,copper_kt,kt,kt,290.0,330.0,310.0
+12,Ivanhoe Mines,copper,铜,2027,380-420 kt,1,1,copper_kt,kt,kt,380.0,420.0,400.0
+12,Ivanhoe Mines,copper,铜,2028,500+ kt,1,0,,,,,,
+13,Lundin Mining,copper,铜,2026,310-335 kt,1,1,copper_kt,kt,kt,310.0,335.0,322.5
+13,Lundin Mining,copper,铜,2027,315-340 kt,1,1,copper_kt,kt,kt,315.0,340.0,327.5
+13,Lundin Mining,copper,铜,2028,290-315 kt,1,1,copper_kt,kt,kt,290.0,315.0,302.5
+9,Newmont,copper,铜,2026,未单列披露,0,0,,,,,,
+9,Newmont,copper,铜,2027,未单列披露,0,0,,,,,,
+9,Newmont,copper,铜,2028,未单列披露,0,0,,,,,,
+4,Rio Tinto,copper,铜,2026,800-870 kt,1,1,copper_kt,kt,kt,800.0,870.0,835.0
+4,Rio Tinto,copper,铜,2027,未单列披露,0,0,,,,,,
+4,Rio Tinto,copper,铜,2028,未单列披露,0,0,,,,,,
+18,Southern Copper,copper,铜,2026,未单列披露,0,0,,,,,,
+18,Southern Copper,copper,铜,2027,未单列披露,0,0,,,,,,
+18,Southern Copper,copper,铜,2028,未单列披露,0,0,,,,,,
+17,Teck,copper,铜,2026,280-310 kt,1,1,copper_kt,kt,kt,280.0,310.0,295.0
+17,Teck,copper,铜,2027,280-310 kt,1,1,copper_kt,kt,kt,280.0,310.0,295.0
+17,Teck,copper,铜,2028,270-300 kt,1,1,copper_kt,kt,kt,270.0,300.0,285.0
+2,Zijin Mining,copper,铜,2026,120 万吨,1,1,copper_kt,万吨,kt,1200.0,1200.0,1200.0
+2,Zijin Mining,copper,铜,2027,未单列披露,0,0,,,,,,
+2,Zijin Mining,copper,铜,2028,150-160 万吨,1,1,copper_kt,万吨,kt,1500.0,1600.0,1550.0
+24,Agnico Eagle,gold,黄金,2026,约 3.3-3.5 Moz,1,1,gold_tonnes,Moz,吨,102.64147344,108.86216879999999,105.75182111999999
+24,Agnico Eagle,gold,黄金,2027,约 3.3-3.5 Moz,1,1,gold_tonnes,Moz,吨,102.64147344,108.86216879999999,105.75182111999999
+24,Agnico Eagle,gold,黄金,2028,约 3.3-3.5 Moz,1,1,gold_tonnes,Moz,吨,102.64147344,108.86216879999999,105.75182111999999
+26,AngloGold Ashanti,gold,黄金,2026,未单列披露,0,0,,,,,,
+26,AngloGold Ashanti,gold,黄金,2027,未单列披露,0,0,,,,,,
+26,AngloGold Ashanti,gold,黄金,2028,未单列披露,0,0,,,,,,
+16,Antofagasta,gold,黄金,2026,60-70 koz,1,1,gold_tonnes,koz,吨,1.866208608,2.1772433760000003,2.0217259920000004
+16,Antofagasta,gold,黄金,2027,未单列披露,0,0,,,,,,
+16,Antofagasta,gold,黄金,2028,未单列披露,0,0,,,,,,
+6,Barrick,gold,黄金,2026,2.90-3.25 Moz,1,1,gold_tonnes,Moz,吨,90.20008272,101.0862996,95.64319116
+6,Barrick,gold,黄金,2027,未单列披露,0,0,,,,,,
+6,Barrick,gold,黄金,2028,未单列披露,0,0,,,,,,
+11,Freeport-McMoRan,gold,黄金,2026,0.9 Moz,1,1,gold_tonnes,Moz,吨,27.99312912,27.99312912,27.99312912
+11,Freeport-McMoRan,gold,黄金,2027,约 1.3 Moz,1,1,gold_tonnes,Moz,吨,40.43451984,40.43451984,40.43451984
+11,Freeport-McMoRan,gold,黄金,2028,约 1.3 Moz,1,1,gold_tonnes,Moz,吨,40.43451984,40.43451984,40.43451984
+25,Kinross,gold,黄金,2026,约 2.0 Moz Au eq,1,1,gold_tonnes,Moz,吨,62.2069536,62.2069536,62.2069536
+25,Kinross,gold,黄金,2027,约 2.0 Moz Au eq,1,1,gold_tonnes,Moz,吨,62.2069536,62.2069536,62.2069536
+25,Kinross,gold,黄金,2028,约 2.0 Moz Au eq,1,1,gold_tonnes,Moz,吨,62.2069536,62.2069536,62.2069536
+14,Lundin Mining,gold,黄金,2026,134-149 koz,1,1,gold_tonnes,koz,吨,4.1678658912,4.6344180432,4.4011419672
+14,Lundin Mining,gold,黄金,2027,未单列披露,0,0,,,,,,
+14,Lundin Mining,gold,黄金,2028,未单列披露,0,0,,,,,,
+8,Newmont,gold,黄金,2026,约 5.3 Moz,1,1,gold_tonnes,Moz,吨,164.84842704,164.84842704,164.84842704
+8,Newmont,gold,黄金,2027,未单列披露,0,0,,,,,,
+8,Newmont,gold,黄金,2028,未单列披露,0,0,,,,,,
+1,Zijin Mining,gold,黄金,2026,105 吨,1,1,gold_tonnes,吨,吨,105.0,105.0,105.0
+1,Zijin Mining,gold,黄金,2027,未单列披露,0,0,,,,,,
+1,Zijin Mining,gold,黄金,2028,130-140 吨,1,1,gold_tonnes,吨,吨,130.0,140.0,135.0
+22,Albemarle,lithium,锂,2026,情景口径，未单列披露,0,0,,,,,,
+22,Albemarle,lithium,锂,2027,未单列披露,0,0,,,,,,
+22,Albemarle,lithium,锂,2028,未单列披露,0,0,,,,,,
+23,Ganfeng Lithium,lithium,锂,2026,未单列披露,0,0,,,,,,
+23,Ganfeng Lithium,lithium,锂,2027,未单列披露,0,0,,,,,,
+23,Ganfeng Lithium,lithium,锂,2028,未单列披露,0,0,,,,,,
+20,Mineral Resources,lithium,锂,2026,未单列披露,0,0,,,,,,
+20,Mineral Resources,lithium,锂,2027,600 ktpa SC6 安装产能建设中,1,1,lithium_spodumene_kt,ktpa,kt SC6,600.0,600.0,600.0
+20,Mineral Resources,lithium,锂,2028,2H FY28 调试爬坡,1,0,,,,,,
+19,Pilbara Minerals,lithium,锂,2026,680 ktpa spodumene capacity path,1,1,lithium_spodumene_kt,ktpa,kt SC6,680.0,680.0,680.0
+19,Pilbara Minerals,lithium,锂,2027,未单列披露,0,0,,,,,,
+19,Pilbara Minerals,lithium,锂,2028,1 Mtpa 路径,1,1,lithium_spodumene_kt,Mtpa,kt SC6,1000.0,1000.0,1000.0
+5,Rio Tinto,lithium,锂,2026,61-64 kt LCE,1,1,lithium_lce_kt,kt,kt LCE,61.0,64.0,62.5
+5,Rio Tinto,lithium,锂,2027,未单列披露,0,0,,,,,,
+5,Rio Tinto,lithium,锂,2028,未单列披露,0,0,,,,,,
+21,SQM,lithium,锂,2026,未单列披露,0,0,,,,,,
+21,SQM,lithium,锂,2027,未单列披露,0,0,,,,,,
+21,SQM,lithium,锂,2028,Mt Holland/Kwinana 氢氧化锂 50 ktpa 路径,1,1,lithium_hydroxide_kt,ktpa,kt LiOH,50.0,50.0,50.0
+3,Zijin Mining,lithium,锂,2026,12 万吨 LCE,1,1,lithium_lce_kt,万吨,kt LCE,120.0,120.0,120.0
+3,Zijin Mining,lithium,锂,2027,未单列披露,0,0,,,,,,
+3,Zijin Mining,lithium,锂,2028,27-32 万吨 LCE,1,1,lithium_lce_kt,万吨,kt LCE,270.0,320.0,295.0

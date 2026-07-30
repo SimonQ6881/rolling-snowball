@@ -1,0 +1,302 @@
+{
+  "portfolio": {
+    "name": "紫金矿业",
+    "ts_code": "601899.SH",
+    "shares": 20000,
+    "cost_price": 26.128,
+    "trim_unit": 2000,
+    "core_position_floor": 0.6,
+    "mobile_position_ceiling": 0.5
+  },
+  "report": {
+    "lookback_days": 180,
+    "output_dir": "reports",
+    "timezone": "Asia/Shanghai"
+  },
+  "archive": {
+    "output_dir": "data/archive"
+  },
+  "watchlist": {
+    "indices_cn": [
+      {
+        "label": "上证综指",
+        "ts_code": "000001.SH"
+      },
+      {
+        "label": "沪深300",
+        "ts_code": "000300.SH"
+      },
+      {
+        "label": "深证成指",
+        "ts_code": "399001.SZ"
+      }
+    ],
+    "indices_global": [
+      {
+        "label": "纳斯达克",
+        "ts_code": "IXIC"
+      },
+      {
+        "label": "标普500",
+        "ts_code": "SPX"
+      },
+      {
+        "label": "恒生指数",
+        "ts_code": "HSI"
+      },
+      {
+        "label": "富时A50",
+        "ts_code": "XIN9"
+      }
+    ],
+    "fx_pairs": [
+      {
+        "label": "美元兑离岸人民币",
+        "ts_code": "USDCNH.FXCM"
+      }
+    ],
+    "etf_proxies": [
+      {
+        "label": "黄金ETF代理",
+        "ts_code": "518880.SH"
+      }
+    ],
+    "futures_main": [
+      {
+        "label": "黄金主力",
+        "ts_code": "AU.SHF"
+      },
+      {
+        "label": "白银主力",
+        "ts_code": "AG.SHF"
+      },
+      {
+        "label": "铜主力",
+        "ts_code": "CU.SHF"
+      }
+    ],
+    "precious_assets": [
+      {
+        "label": "黄金主力",
+        "source": "future",
+        "ts_code": "AU.SHF",
+        "asset": "FT"
+      },
+      {
+        "label": "铜主力",
+        "source": "future",
+        "ts_code": "CU.SHF",
+        "asset": "FT"
+      },
+      {
+        "label": "锂指数代理",
+        "source": "ths",
+        "ts_code": "884286.TI"
+      }
+    ],
+    "theme_indices": [
+      {
+        "label": "AI",
+        "source": "ths",
+        "ts_code": "885728.TI"
+      },
+      {
+        "label": "芯片",
+        "source": "ths",
+        "ts_code": "885756.TI"
+      },
+      {
+        "label": "通信",
+        "source": "ths",
+        "ts_code": "881129.TI"
+      },
+      {
+        "label": "电力",
+        "source": "ths",
+        "ts_code": "881145.TI"
+      }
+    ]
+  },
+  "external_sources": {
+    "macro_proxies": {
+      "dollar_index_fred": {
+        "series_id": "DTWEXBGS",
+        "label": "美元指数代理"
+      }
+    },
+    "research": {
+      "cache_file": "data/cache/research_entries.json",
+      "keywords": [
+        "紫金",
+        "黄金",
+        "金价",
+        "铜价",
+        "锂",
+        "美元",
+        "美债",
+        "央行",
+        "AI",
+        "芯片",
+        "通信",
+        "电力"
+      ]
+    },
+    "policy": {
+      "cache_file": "data/cache/policy_events.json"
+    },
+    "gold_purchase": {
+      "cache_file": "data/cache/central_bank_gold.json",
+      "lookback_months": 8
+    },
+    "commodity_supply_plans": {
+      "cache_file": "data/cache/commodity_supply_plans.json"
+    },
+    "translation": {
+      "enabled": false,
+      "model": "gpt-4.1-mini",
+      "timeout_seconds": 30,
+      "max_retries": 3,
+      "cache_dir": "data/cache/translations",
+      "alert_dir": "data/alerts/translations",
+      "glossary": {
+        "Federal Reserve": "美联储",
+        "FOMC": "联邦公开市场委员会",
+        "Bank of Japan": "日本央行",
+        "Bank of England": "英国央行",
+        "rate cut": "降息",
+        "rate hike": "加息",
+        "gold reserves": "黄金储备",
+        "central bank": "央行",
+        "Treasury yields": "美国国债收益率",
+        "US dollar": "美元",
+        "dollar index": "美元指数"
+      }
+    },
+    "research_tracking": {
+      "state_file": "data/cache/research_tracking_state.json",
+      "alert_file": "data/alerts/research_updates_latest.json"
+    }
+  },
+  "commodity_analysis": {
+    "price_events": [
+      {
+        "month": "2025-09",
+        "title": "3Q盐湖一期投产",
+        "detail": "阿根廷 Tres Quebradas（3Q）盐湖一期2万吨LCE项目投产，锂板块进入实质放量阶段。"
+      },
+      {
+        "month": "2026-01",
+        "title": "巨龙铜矿二期投产",
+        "detail": "巨龙铜矿二期于2026年1月建成投产，公开目标对应年产铜30-35万吨。"
+      },
+      {
+        "month": "2026-03",
+        "title": "2025年报与三年指引披露",
+        "detail": "公司披露2025年报及2026/2028产量指引，明确矿产金105吨、矿产铜120万吨、碳酸锂12万吨目标。"
+      }
+    ]
+  },
+  "logic_monitor": {
+    "rules": [
+      "美联储连续加息超过2次，且点阵图显示加息预期继续上移",
+      "全球央行连续两个季度停止增持黄金，或中国央行明确停止增持",
+      "AI企业盈利持续大幅超预期，且落地效率被财务数据验证",
+      "美元指数进入强势上行区间并长期维持高位，美国经济显著超预期强韧"
+    ],
+    "exit_threshold": 2
+  },
+  "focus_monitor": {
+    "macro_logic": [
+      {
+        "title": "逻辑一：美联储加息空间有限，无法真正压制黄金",
+        "summary": "关注利率与美元是否继续形成对黄金的持续压制，重点验证加息约束与黄金韧性。",
+        "watch_points": [
+          "美元兑离岸人民币走势是否继续回落或维持弱美元环境",
+          "黄金ETF代理与黄金主力是否在利率扰动中保持相对强势",
+          "利率曲线与资金利率是否出现持续上行并压制黄金的证据"
+        ]
+      },
+      {
+        "title": "逻辑二：去美元化不可逆，黄金成为储备体系重构核心资产",
+        "summary": "关注黄金相对美元资产的中长期强弱，以及避险资产地位是否继续强化。",
+        "watch_points": [
+          "黄金ETF代理是否持续强于主要风险资产",
+          "避险情绪升温时，黄金是否优先得到资金回流",
+          "美元相关资产是否持续体现储备吸引力下降"
+        ]
+      },
+      {
+        "title": "逻辑三：AI虹吸效应不可持续，资金终将回流黄金",
+        "summary": "观察AI风险偏好与黄金之间的跷跷板效应，并验证铜的实物需求是否持续。",
+        "watch_points": [
+          "纳斯达克与黄金ETF代理的强弱切换",
+          "黄金ETF代理与铜主力是否同步修复",
+          "AI热度降温后，黄金是否重新走强"
+        ]
+      },
+      {
+        "title": "逻辑四：美元中长期贬值是高概率事件",
+        "summary": "重点观察美元兑离岸人民币、黄金代理与风险资产的中长期相对趋势。",
+        "watch_points": [
+          "USDCNH 是否逐步走低并维持弱美元方向",
+          "黄金ETF代理是否随着美元走弱而抬升",
+          "全球风险资产与黄金的相对估值是否重新平衡"
+        ]
+      }
+    ],
+    "micro_logic": {
+      "production_targets": [
+        {
+          "product": "矿产金",
+          "actual_2025": "90吨",
+          "target_2026": "105吨",
+          "target_2028": "130-140吨",
+          "growth_range": "+44%～+56%"
+        },
+        {
+          "product": "矿产铜",
+          "actual_2025": "109万吨",
+          "target_2026": "120万吨",
+          "target_2028": "150-160万吨",
+          "growth_range": "+38%～+47%"
+        },
+        {
+          "product": "碳酸锂",
+          "actual_2025": "2.55万吨",
+          "target_2026": "12万吨",
+          "target_2028": "27-32万吨",
+          "growth_range": "+960%～+1155%"
+        }
+      ],
+      "support_points": [
+        {
+          "title": "支撑一：产量确定性增长",
+          "summary": "即便金铜价格持平，产量提升本身也能驱动利润增长。",
+          "watch_points": [
+            "财报营收、归母净利润、经营现金流是否延续增长",
+            "季度数据是否支持产能释放与项目爬坡",
+            "市场是否继续给予低估值错配"
+          ]
+        },
+        {
+          "title": "支撑二：铜的刚性需求",
+          "summary": "AI基建、电网、数据中心等物理投入不会因为主题波动而消失。",
+          "watch_points": [
+            "铜主力中期趋势是否保持强势或高位震荡",
+            "紫金股价是否受益于铜价和铜量双轮驱动",
+            "风险资产波动时，铜价是否显示出更强需求韧性"
+          ]
+        },
+        {
+          "title": "支撑三：锂的增量弹性",
+          "summary": "锂项目一旦兑现2028目标，紫金将获得更强利润弹性和重估空间。",
+          "watch_points": [
+            "锂业务是否在财务数据或公告中持续体现进展",
+            "资本开支与项目推进是否符合扩产节奏",
+            "低成本优势是否继续保留在行业成本曲线左端"
+          ]
+        }
+      ]
+    }
+  }
+}

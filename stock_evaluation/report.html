@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>股票评估报告</title>
+  <link rel="stylesheet" href="/stock_evaluation/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav-tabs">
+      <a href="/stock-evaluation/index.html">评估工作台</a>
+      <a class="active" href="/stock-evaluation/report.html">评估报告</a>
+      <a href="/stock-evaluation/assets.html">数据资产中心</a>
+    </nav>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="small-label" id="report-symbol">评估报告</div>
+          <h1 class="page-title" id="report-title">加载中</h1>
+          <p id="report-subtitle">正在拉取评估详情。</p>
+        </div>
+        <div class="badge-row" id="report-meta-badges"></div>
+      </div>
+    </section>
+
+    <section class="report-grid" style="margin-top:24px;">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>维度结构</h2>
+            <p>雷达图展示当前五大维度得分，用于快速定位强项与短板。</p>
+          </div>
+        </div>
+        <div class="chart-box" id="radar-chart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>核心结论</h2>
+            <p>建议先看评级、扣分点，再决定是否进入深度研究。</p>
+          </div>
+        </div>
+        <div class="cards-grid" id="headline-cards"></div>
+        <div class="panel" style="margin-top:18px;padding:18px;">
+          <h3 style="margin-bottom:10px;">评估建议</h3>
+          <div id="advice-text" class="subtle">--</div>
+        </div>
+        <div class="panel" style="margin-top:18px;padding:18px;">
+          <h3 style="margin-bottom:10px;">信号标签</h3>
+          <div id="signal-tags" class="chip-row"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:24px;">
+      <div class="panel-header">
+        <div>
+          <h2>行业参考与历史趋势</h2>
+          <p>横向参考优先使用行业中位数，纵向趋势展示已保存的历史结果。</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="list-card">
+          <h3 style="margin-bottom:14px;">行业估值参考</h3>
+          <div id="industry-baseline" class="list">
+            <div class="empty">暂无可展示的行业基线数据</div>
+          </div>
+        </div>
+        <div class="list-card">
+          <h3 style="margin-bottom:14px;">历史得分趋势</h3>
+          <div class="chart-box" id="history-chart" style="height:260px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:24px;">
+      <div class="panel-header">
+        <div>
+          <h2>亮点、风险与跟踪点</h2>
+          <p>把评估结果拆成正向驱动、主要风险和后续观察重点，减少只有总分没有判断的情况。</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="list-card">
+          <h3 style="margin-bottom:14px;">核心亮点</h3>
+          <div id="strength-list" class="list"></div>
+        </div>
+        <div class="list-card">
+          <h3 style="margin-bottom:14px;">主要风险</h3>
+          <div id="risk-list" class="list"></div>
+        </div>
+      </div>
+      <div class="list-card" style="margin-top:16px;">
+        <h3 style="margin-bottom:14px;">跟踪要点</h3>
+        <div id="watch-list" class="list"></div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:24px;">
+      <div class="panel-header">
+        <div>
+          <h2>维度解读</h2>
+          <p>每个一级维度除了分数，还给出当前区间判断和一句结构化解释。</p>
+        </div>
+      </div>
+      <div id="dimension-insights" class="cards-grid"></div>
+    </section>
+
+    <section class="panel" style="margin-top:24px;">
+      <div class="panel-header">
+        <div>
+          <h2>指标明细</h2>
+          <p>显示原始值、得分与备注，便于复核评分来源。</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>维度</th>
+              <th>指标</th>
+              <th>原始值</th>
+              <th>得分</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody id="indicator-body">
+            <tr><td colspan="5">加载中</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:24px;">
+      <div class="panel-header">
+        <div>
+          <h2>标签与笔记</h2>
+          <p>给本次评估打标签并记录研究结论，方便后续按主题召回。</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="list-card">
+          <div class="chip-row" id="tag-list" style="margin-bottom:16px;"></div>
+          <div class="form-grid">
+            <input id="tag-input" placeholder="输入标签，多个标签用逗号分隔">
+            <button id="save-tag-btn" class="primary-btn" type="button">保存标签</button>
+            <a class="ghost-btn" href="/stock-evaluation/assets.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">回到资产中心</a>
+          </div>
+        </div>
+        <div class="list-card">
+          <textarea id="note-input" class="note-box" placeholder="记录你的研究结论、催化剂、风险点。"></textarea>
+          <div class="form-grid" style="margin-top:12px;">
+            <div></div>
+            <button id="save-note-btn" class="primary-btn" type="button">保存笔记</button>
+            <div></div>
+          </div>
+          <div id="note-list" class="list" style="margin-top:16px;"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script type="module" src="/stock_evaluation/report.js"></script>
+</body>
+</html>

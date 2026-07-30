@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>股票评估工具设计文档</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --primary-soft: #eff6ff;
+      --success: #166534;
+      --warning: #92400e;
+      --danger: #b91c1c;
+      --code-bg: #111827;
+      --code-text: #e5e7eb;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
+      --content-width: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      line-height: 1.75;
+    }
+
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 36px 40px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+      line-height: 1.25;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 16px;
+    }
+
+    .meta {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .toc,
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .toc {
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .toc h2 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 22px;
+    }
+
+    .toc ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .toc a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .section {
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-soft);
+      font-size: 28px;
+      color: #111827;
+    }
+
+    h3 {
+      margin-top: 28px;
+      margin-bottom: 12px;
+      font-size: 21px;
+      color: #0f172a;
+    }
+
+    h4 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+      font-size: 17px;
+      color: #1f2937;
+    }
+
+    p {
+      margin: 10px 0 14px;
+    }
+
+    ul,
+    ol {
+      margin: 10px 0 16px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .callout {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-soft);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 16px 0 20px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 18px;
+      background: #fff;
+    }
+
+    .card h4 {
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 22px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #111827;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fcfcfd;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      background: #f3f4f6;
+      color: #111827;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 18px 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 16px 0 22px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .mermaid {
+      margin: 18px 0 24px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    .footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 28px 24px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .section,
+      .toc {
+        padding: 22px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <h1>股票评估工具设计文档</h1>
+      <p>面向“宏观-行业指引 + 个股量化评估 + 历史对比分析”集成化投资辅助系统的系统性设计说明。</p>
+      <div class="meta">
+        <span class="tag">HTML 规范文档</span>
+        <span class="tag">可直接供 AI 解析</span>
+        <span class="tag">包含 Mermaid 流程图</span>
+        <span class="tag">适用于后续开发与审阅</span>
+      </div>
+    </header>
+
+    <nav class="toc">
+      <h2>目录</h2>
+      <ul>
+        <li><a href="#overview">项目核心概述</a></li>
+        <li><a href="#motivation">设计初衷</a>
+          <ul>
+            <li><a href="#motivation-background">项目开发背景</a></li>
+            <li><a href="#motivation-painpoints">解决的核心痛点</a></li>
+            <li><a href="#motivation-goals">业务目标与技术目标</a></li>
+            <li><a href="#motivation-source">需求来源与优先级排序</a></li>
+          </ul>
+        </li>
+        <li><a href="#thinking">设计思路</a>
+          <ul>
+            <li><a href="#thinking-principles">整体设计原则</a></li>
+            <li><a href="#thinking-architecture">架构选型推演</a></li>
+            <li><a href="#thinking-tech">核心技术栈选型理由</a></li>
+            <li><a href="#thinking-diff">与同类方案的差异化对比</a></li>
+            <li><a href="#thinking-flow">核心业务流程梳理</a></li>
+          </ul>
+        </li>
+        <li><a href="#solution">程序设计方案</a>
+          <ul>
+            <li><a href="#solution-modules">模块拆分方案</a></li>
+            <li><a href="#solution-classes">核心类与接口定义</a></li>
+            <li><a href="#solution-dataflow">数据流转逻辑</a></li>
+            <li><a href="#solution-implementation">关键功能实现逻辑</a></li>
+            <li><a href="#solution-exception">异常处理机制</a></li>
+            <li><a href="#solution-performance">性能优化策略</a></li>
+            <li><a href="#solution-maintainability">可维护性与扩展性设计</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <section id="overview" class="section">
+      <h2>项目核心概述</h2>
+      <p>本项目旨在将现有“自动选股工具”重构为“股票评估工具”，系统核心定位从“全市场自动遍历 + 自动输出股票名单”切换为“宏观与行业方向指引 + 用户自主提交股票 + 系统标准化量化评估 + 结果历史沉淀与多维对比”。</p>
+      <div class="callout">
+        <strong>核心定位：</strong>系统不再替用户做全市场自动选股，而是帮助用户在既定宏观与行业框架下，对指定股票进行标准化、可解释、可追溯的评估。
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h4>业务目标</h4>
+          <ul>
+            <li>建立“宏观-行业-个股”一体化评估闭环</li>
+            <li>支持用户自主录入 A 股、港股股票代码</li>
+            <li>输出标准化个股评估报告与历史对比结果</li>
+            <li>实现全量评估结果结构化存储与版本追溯</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>设计边界</h4>
+          <ul>
+            <li>不再执行全市场自动遍历选股</li>
+            <li>不包含自动交易与下单能力</li>
+            <li>不以高频择时为目标</li>
+            <li>优先服务研究驱动、低频决策场景</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="motivation" class="section">
+      <h2>设计初衷</h2>
+
+      <h3 id="motivation-background">项目开发背景</h3>
+      <p>现有工具以“全市场自动遍历 + 自动选股”为核心，这类模式更适合广撒网式的量化筛选，不适合研究驱动、低频决策、强调可解释性的投资分析场景。随着使用目标逐步聚焦于“先判断宏观与行业方向，再对具体标的做深入评估”，原有工具在产品定位、数据结构、交互方式和结果输出形态上均已不再匹配新的业务需求。</p>
+      <p>因此，本项目将原系统重构为“股票评估工具”，系统不再承担自动生成候选股票池的职责，而是转为面向用户已关注标的的标准化评估平台，围绕“宏观-行业指引 + 个股量化评估 + 历史对比分析”形成完整闭环。</p>
+
+      <h3 id="motivation-painpoints">解决的核心痛点</h3>
+      <ol>
+        <li>原工具以自动遍历全市场为核心，输出结果噪声高，难以承接研究驱动型投资流程。</li>
+        <li>缺乏“宏观方向判断 -&gt; 行业赛道筛选 -&gt; 个股评估”的前置引导能力，用户仍需在系统外完成大量判断。</li>
+        <li>个股评估结果缺乏统一规则、版本记录和历史追踪，不利于长期研究积累。</li>
+        <li>缺乏跨股票横向对比和同一股票跨时间纵向对比能力，难以支持多标的决策。</li>
+        <li>数据结构与导出能力不足，无法直接为 AI 编程、自动化分析和二次开发提供稳定输入。</li>
+      </ol>
+
+      <h3 id="motivation-goals">业务目标与技术目标</h3>
+      <h4>业务目标</h4>
+      <ul>
+        <li>将系统定位从“自动选股工具”升级为“投资评估工作台”。</li>
+        <li>为用户提供清晰的宏观与行业赛道指引，帮助用户先确定研究方向，再提交具体股票代码。</li>
+        <li>为用户提交的 A 股、港股股票生成标准化、可解释、可追溯的量化评估报告。</li>
+        <li>将所有评估结果结构化入库，支持历史沉淀、横向对比、纵向趋势分析和导出。</li>
+        <li>为后续 AI 工具调用、规则调整、市场扩展提供标准化接口和数据基础。</li>
+      </ul>
+
+      <h4>技术目标</h4>
+      <ul>
+        <li>建立分层清晰、配置驱动的系统架构，避免评分逻辑写死在代码中。</li>
+        <li>支持宏观指引、行业指引、个股评估、结果存储、对比分析的模块化解耦。</li>
+        <li>支持规则版本管理，保证历史评估结果可追溯。</li>
+        <li>支持异步任务机制，满足批量评估、导出和定时刷新等场景。</li>
+        <li>支持后续新增美股等市场，仅通过扩展适配层而非重写核心引擎完成升级。</li>
+      </ul>
+
+      <h3 id="motivation-source">需求来源与优先级排序</h3>
+      <h4>需求来源说明</h4>
+      <ul>
+        <li>业务侧需求：从“自动选股”转向“用户自主选股后标准化评估”。</li>
+        <li>分析侧需求：强化宏观与行业赛道指引能力，使系统在个股评估前即提供方向性建议。</li>
+        <li>工程侧需求：要求输出结构化、标准化、可供 AI 直接解析和生成代码的技术文档。</li>
+      </ul>
+
+      <h4>需求优先级排序</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>优先级</th>
+            <th>范围</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>P0</td>
+            <td>宏观及行业赛道指引、股票代码录入与校验、个股标准化量化评估、评估结果入库与版本管理、单股评估报告展示</td>
+            <td>必须首批交付，构成主链路闭环</td>
+          </tr>
+          <tr>
+            <td>P1</td>
+            <td>同行业横向对比、同股历史纵向对比、Excel/PDF 导出、手动刷新指引、任务进度与状态通知</td>
+            <td>应在首个完整版本交付</td>
+          </tr>
+          <tr>
+            <td>P2</td>
+            <td>规则配置后台、数据备份管理页面、维度钻取分析、多市场扩展能力</td>
+            <td>后续增强能力</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="thinking" class="section">
+      <h2>设计思路</h2>
+
+      <h3 id="thinking-principles">整体设计原则</h3>
+      <ul>
+        <li>从“系统替用户选股”转变为“系统帮助用户评估股票”。</li>
+        <li>先做方向指引，再做个股评估，符合真实研究流程。</li>
+        <li>以标准化评分为主，以解释性输出为辅，兼顾量化与可读性。</li>
+        <li>以配置驱动规则，以版本管理保障可追溯性。</li>
+        <li>以异步任务支撑长耗时计算，以结构化存储支撑历史分析与 AI 调用。</li>
+      </ul>
+
+      <h3 id="thinking-architecture">架构选型推演</h3>
+      <h4>方案一：单体式同步应用</h4>
+      <p>该方案将页面、接口、评分逻辑、数据拉取、导出全部放入单一后端服务，同步执行。</p>
+      <div class="grid-2">
+        <div class="card">
+          <h4>优点</h4>
+          <ul>
+            <li>开发快，初始实现简单</li>
+            <li>模块少，部署门槛低</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>缺点</h4>
+          <ul>
+            <li>长耗时操作会显著拉高接口响应时间</li>
+            <li>后续扩展新市场、新规则时耦合度过高</li>
+            <li>无法优雅支持批量评估、任务进度和异步重试</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>结论：</strong>不适合作为中长期方案。</p>
+
+      <h4>方案二：前后端分离 + 异步任务 + 配置化规则引擎</h4>
+      <p>该方案采用前后端分离架构，后端负责接口、评分引擎、任务编排、数据存储，长耗时任务异步处理，评分规则通过配置文件与版本表管理。</p>
+      <div class="grid-2">
+        <div class="card">
+          <h4>优点</h4>
+          <ul>
+            <li>更适合批量评估、导出、定时刷新场景</li>
+            <li>模块边界清晰，便于后续扩展</li>
+            <li>规则可以配置化和版本化，便于维护</li>
+            <li>更适合与 AI 编程工具、自动化系统集成</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>缺点</h4>
+          <ul>
+            <li>初期设计成本更高</li>
+            <li>需要额外引入 Redis、任务队列等中间件</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>结论：</strong>作为本项目推荐架构。</p>
+
+      <h4>最终架构选型</h4>
+      <p>本系统采用“前后端分离 + 异步任务 + 配置化评分引擎 + 结构化存储”的架构模式，整体分为展示层、接口层、业务层、任务层和数据层五层。</p>
+
+      <h3 id="thinking-tech">核心技术栈选型理由</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>层级</th>
+            <th>技术栈</th>
+            <th>选型理由</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>前端</td>
+            <td>React + TypeScript + Ant Design + ECharts</td>
+            <td>适合复杂工作台页面、强组件化、图表能力好</td>
+          </tr>
+          <tr>
+            <td>后端</td>
+            <td>FastAPI + Pydantic + SQLAlchemy</td>
+            <td>结构化 API 能力强，适合定义清晰的数据模型与接口契约</td>
+          </tr>
+          <tr>
+            <td>异步任务</td>
+            <td>Celery + Redis</td>
+            <td>适配批量评估、导出、月度刷新、失败重试</td>
+          </tr>
+          <tr>
+            <td>数据库</td>
+            <td>PostgreSQL</td>
+            <td>适合结构化业务数据、历史追溯、JSONB 规则配置</td>
+          </tr>
+          <tr>
+            <td>文件存储</td>
+            <td>MinIO</td>
+            <td>适合存储导出文件、快照文件、备份文件</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 id="thinking-diff">与同类方案的差异化对比</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>传统自动选股工具</th>
+            <th>本项目股票评估工具</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>核心定位</td>
+            <td>从全市场自动筛选股票</td>
+            <td>对用户指定股票做标准化评估</td>
+          </tr>
+          <tr>
+            <td>用户角色</td>
+            <td>被动接收系统推荐</td>
+            <td>主动提交标的，系统辅助判断</td>
+          </tr>
+          <tr>
+            <td>分析顺序</td>
+            <td>先股票后解释</td>
+            <td>先宏观行业指引，再个股评估</td>
+          </tr>
+          <tr>
+            <td>输出形态</td>
+            <td>股票名单为主</td>
+            <td>评估报告、对比分析、历史趋势为主</td>
+          </tr>
+          <tr>
+            <td>数据沉淀</td>
+            <td>结果离散，沉淀弱</td>
+            <td>全量结构化入库，强追溯</td>
+          </tr>
+          <tr>
+            <td>规则管理</td>
+            <td>多为代码内嵌</td>
+            <td>配置化、版本化</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 id="thinking-flow">核心业务流程梳理</h3>
+      <h4>总体流程图</h4>
+      <div class="mermaid">
+flowchart TD
+    A[定时或手动刷新宏观与行业数据] --> B[生成宏观及行业赛道指引]
+    B --> C[用户查看指引并录入股票代码]
+    C --> D[系统执行股票代码校验]
+    D --> E{校验是否通过}
+    E -- 否 --> F[返回错误提示并阻止提交]
+    E -- 是 --> G[创建批量评估任务]
+    G --> H[异步拉取行情/财务/经营/行业数据]
+    H --> I[执行标准化评分引擎]
+    I --> J[生成个股评估报告]
+    J --> K[写入数据库并绑定规则版本]
+    K --> L[触发同行业横向对比]
+    K --> M[触发同股历史纵向对比]
+    L --> N[前端展示评估结果与对比图表]
+    M --> N
+    N --> O[支持导出Excel/PDF]
+      </div>
+
+      <h4>用户交互流程图</h4>
+      <div class="mermaid">
+flowchart LR
+    A[查看宏观和行业指引] --> B[选择目标股票]
+    B --> C[录入股票代码]
+    C --> D[系统实时校验]
+    D --> E[提交评估任务]
+    E --> F[查看进度]
+    F --> G[查看评估报告]
+    G --> H[查看横向/纵向对比]
+    H --> I[导出结果]
+      </div>
+    </section>
+
+    <section id="solution" class="section">
+      <h2>程序设计方案</h2>
+
+      <h3 id="solution-modules">模块拆分方案</h3>
+      <h4>宏观及行业赛道指引模块</h4>
+      <ul>
+        <li>聚合宏观与行业数据</li>
+        <li>按权重计算宏观分、行业分、细分赛道分</li>
+        <li>输出图表数据、解读文本和 Top5 赛道结果</li>
+        <li>维护每月指引版本</li>
+      </ul>
+
+      <h4>用户自主选股交互模块</h4>
+      <ul>
+        <li>接收用户输入的股票代码</li>
+        <li>执行格式校验、上市状态校验、市场与板块识别</li>
+        <li>控制单次最多 10 只股票的提交限制</li>
+        <li>创建评估任务并跟踪进度</li>
+      </ul>
+
+      <h4>个股量化评估模块</h4>
+      <ul>
+        <li>拉取个股行情、财务、经营、行业基准数据</li>
+        <li>执行 5 个一级维度、15 个二级指标评分</li>
+        <li>生成综合得分、扣分点、建议文本</li>
+        <li>绑定当前宏观/行业版本与评分规则版本</li>
+      </ul>
+
+      <h4>评估结果存储模块</h4>
+      <ul>
+        <li>保存评估主结果、维度得分、原始指标、排名结果</li>
+        <li>实现同股多次评估历史留存</li>
+        <li>管理导出记录、规则版本、备份日志</li>
+      </ul>
+
+      <h4>多维度历史对比模块</h4>
+      <ul>
+        <li>自动生成同行业已评估股票横向对比</li>
+        <li>生成同股多期纵向趋势</li>
+        <li>支持最多 5 只股票主动对比</li>
+        <li>支持维度钻取到底层数据和差异成因</li>
+      </ul>
+
+      <h3 id="solution-classes">核心类与接口定义</h3>
+      <h4>领域模型层</h4>
+      <pre><code class="language-python">class Stock:
+    code: str
+    name: str
+    market: str
+    board: str
+    industry_lv1: str
+    industry_lv2: str
+
+class GuidanceSnapshot:
+    version_id: str
+    macro_score: float
+    industry_score: float
+    top_tracks: list
+
+class EvaluationTask:
+    task_id: str
+    operator_id: str
+    codes: list[str]
+    status: str
+    progress: float
+
+class StockEvaluation:
+    evaluation_id: str
+    stock_code: str
+    total_score: float
+    rating: str
+    rule_version: str
+    guidance_version: str</code></pre>
+
+      <h4>服务层</h4>
+      <pre><code class="language-python">class GuidanceService:
+    def refresh_guidance(self) -&gt; str: ...
+    def get_latest_guidance(self) -&gt; GuidanceSnapshot: ...
+    def get_guidance_detail(self, version_id: str): ...
+
+class StockValidationService:
+    def validate_codes(self, codes: list[str]) -&gt; list[dict]: ...
+
+class EvaluationService:
+    def create_task(self, codes: list[str], operator_id: str) -&gt; str: ...
+    def evaluate_one_stock(self, code: str, context: dict) -&gt; str: ...
+    def get_evaluation_report(self, evaluation_id: str): ...
+
+class ComparisonService:
+    def compare_peers(self, evaluation_id: str): ...
+    def compare_cross_stocks(self, codes: list[str]): ...
+    def compare_stock_history(self, code: str): ...
+
+class ExportService:
+    def export_evaluation(self, evaluation_id: str, export_type: str) -&gt; str: ...
+    def export_comparison(self, biz_id: str, export_type: str) -&gt; str: ...</code></pre>
+
+      <h4>接口设计原则</h4>
+      <ul>
+        <li>所有接口使用统一返回格式</li>
+        <li>所有业务实体使用结构化 JSON</li>
+        <li>所有评估结果必须返回 <code>rule_version</code> 与 <code>guidance_version</code></li>
+        <li>所有异步任务必须提供任务 ID 和进度查询接口</li>
+      </ul>
+
+      <h3 id="solution-dataflow">数据流转逻辑</h3>
+      <h4>宏观与行业指引数据流</h4>
+      <div class="mermaid">
+flowchart TD
+    A[宏观数据源/行业数据源] --> B[数据采集层]
+    B --> C[清洗与标准化]
+    C --> D[权重计算与指引生成]
+    D --> E[指引版本入库]
+    E --> F[前端获取摘要与详情]
+      </div>
+
+      <h4>个股评估数据流</h4>
+      <div class="mermaid">
+flowchart TD
+    A[用户提交股票代码] --> B[代码校验]
+    B --> C[创建任务]
+    C --> D[读取当前规则版本]
+    D --> E[拉取个股行情/财务/经营数据]
+    E --> F[读取行业基准数据]
+    F --> G[评分引擎计算]
+    G --> H[生成扣分点与建议]
+    H --> I[评估结果入库]
+    I --> J[生成横向/纵向对比]
+    J --> K[前端展示]
+      </div>
+
+      <h3 id="solution-implementation">关键功能实现逻辑</h3>
+      <h4>评分引擎核心逻辑</h4>
+      <p>评分引擎以 5 个一级维度、15 个二级指标为核心：</p>
+      <ol>
+        <li>估值维度：市盈率、市净率、市销率</li>
+        <li>盈利维度：ROE、毛利率、净利率</li>
+        <li>成长维度：营收增速、净利润增速、研发投入增速</li>
+        <li>财务健康维度：资产负债率、流动比率、经营现金流净额/净利润</li>
+        <li>竞争力维度：市场份额、毛利率偏离行业均值、研发投入占营收比</li>
+      </ol>
+
+      <pre><code>拉取原始指标值
+-> 获取行业均值 / 行业TOP30均值 / 历史分位数 / 安全阈值
+-> 对每个二级指标进行标准化评分
+-> 聚合得到一级维度得分
+-> 按一级维度权重聚合综合得分
+-> 生成评级、扣分点和建议</code></pre>
+
+      <h4>股票代码校验</h4>
+      <ul>
+        <li>判断输入长度与格式</li>
+        <li>A 股使用 6 位数字规则，并根据前缀识别沪市、深市、创业板、科创板</li>
+        <li>港股使用 5 位数字规则，并通过主数据表判断是否为主板或 GEM</li>
+        <li>对格式正确但不存在或非上市主体的代码返回明确错误原因</li>
+      </ul>
+
+      <h4>批量评估任务</h4>
+      <ul>
+        <li>用户提交代码列表后创建评估任务主记录</li>
+        <li>为每只股票创建任务明细记录</li>
+        <li>由 Celery Worker 并发执行单股评估</li>
+        <li>每只股票完成后更新任务进度</li>
+        <li>任务结束后返回整体状态为成功、部分成功或失败</li>
+      </ul>
+
+      <h4>同行业对比</h4>
+      <ul>
+        <li>读取当前股票所属二级赛道</li>
+        <li>获取数据库中同赛道已评估股票的最新结果</li>
+        <li>计算综合分排名、分位值、各维度高低差异</li>
+        <li>输出优势维度、短板维度和雷达图数据</li>
+      </ul>
+
+      <h3 id="solution-exception">异常处理机制</h3>
+      <h4>异常分类</h4>
+      <ul>
+        <li>输入异常</li>
+        <li>数据异常</li>
+        <li>任务异常</li>
+        <li>外部依赖异常</li>
+        <li>系统内部异常</li>
+      </ul>
+
+      <h4>异常定义建议</h4>
+      <pre><code class="language-python">class BizException(Exception): ...
+class InvalidStockCodeException(BizException): ...
+class NonListedEntityException(BizException): ...
+class DataSourceUnavailableException(BizException): ...
+class FinancialDataMissingException(BizException): ...
+class EvaluationTaskFailedException(BizException): ...
+class ExportFailedException(BizException): ...</code></pre>
+
+      <h4>异常处理原则</h4>
+      <ul>
+        <li>所有可预期异常必须返回结构化错误码与错误信息</li>
+        <li>外部数据源异常优先降级，无法降级时标记任务失败</li>
+        <li>单只股票评估失败不应导致整批任务整体失败</li>
+        <li>所有异常必须记录日志，支持后续追踪</li>
+      </ul>
+
+      <h4>异常降级策略</h4>
+      <ul>
+        <li>若宏观指引刷新失败，保留上一版本并提示“当前展示为最近成功版本”</li>
+        <li>若某只股票缺失部分财务数据，可按规则降级为“缺失项不计分并提示风险”</li>
+        <li>若导出失败，保留业务结果并允许用户重试</li>
+      </ul>
+
+      <h3 id="solution-performance">性能优化策略</h3>
+      <h4>评估性能优化</h4>
+      <ul>
+        <li>行业均值、行业 TOP30 均值、历史分位数预计算并缓存</li>
+        <li>批量任务采用异步并发处理</li>
+        <li>单只股票评估过程严格限制同步阻塞操作</li>
+        <li>外部数据请求采用连接池与超时控制</li>
+      </ul>
+
+      <h4>查询性能优化</h4>
+      <ul>
+        <li>对股票代码、评估时间、版本号、行业字段建立索引</li>
+        <li>历史评估主表按月份或季度分区</li>
+        <li>热点报告和指引摘要使用 Redis 缓存</li>
+        <li>对横向对比结果可做预计算并入库</li>
+      </ul>
+
+      <h4>前端性能优化</h4>
+      <ul>
+        <li>大表分页加载</li>
+        <li>图表按需渲染</li>
+        <li>首屏只加载摘要数据，详情异步拉取</li>
+        <li>导出、对比、趋势等重数据操作使用独立请求</li>
+      </ul>
+
+      <h3 id="solution-maintainability">可维护性与扩展性设计</h3>
+      <h4>配置化策略</h4>
+      <p>以下内容必须配置化：</p>
+      <ol>
+        <li>一级维度权重</li>
+        <li>二级指标权重</li>
+        <li>评分阈值</li>
+        <li>建议文案模板</li>
+        <li>行业映射规则</li>
+        <li>指引评分规则</li>
+      </ol>
+
+      <h4>日志与监控</h4>
+      <p>系统需至少记录以下日志：</p>
+      <ul>
+        <li>指引刷新日志</li>
+        <li>股票校验日志</li>
+        <li>评估任务日志</li>
+        <li>导出任务日志</li>
+        <li>规则发布日志</li>
+        <li>备份任务日志</li>
+      </ul>
+      <p>监控指标建议包括：</p>
+      <ul>
+        <li>单股评估耗时</li>
+        <li>批量任务成功率</li>
+        <li>接口平均响应时间</li>
+        <li>数据源失败率</li>
+        <li>导出成功率</li>
+        <li>数据库查询耗时</li>
+      </ul>
+
+      <h4>关键非功能实现说明</h4>
+      <ul>
+        <li>单只股票评估响应时长不超过 30 秒：通过预聚合、异步拉数、并发执行实现</li>
+        <li>10 只股票批量评估不超过 5 分钟：通过 Worker 并发和任务拆分实现</li>
+        <li>数据库查询响应不超过 2 秒：通过索引、缓存和查询优化实现</li>
+        <li>支持 50 名用户同时在线：通过前后端分离、缓存和多实例部署实现</li>
+      </ul>
+
+      <h4>扩展性落地方式</h4>
+      <ul>
+        <li>市场适配单独抽象为适配层</li>
+        <li>评分引擎只消费标准化后的统一指标模型</li>
+        <li>新增美股时只需增加代码校验器、主数据映射、数据连接器和市场口径适配器</li>
+      </ul>
+
+      <h4>实施建议</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>阶段</th>
+            <th>重点内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>第一阶段</td>
+            <td>完成主数据、代码校验、任务系统、评估主链路、宏观指引摘要和单股评估报告页</td>
+          </tr>
+          <tr>
+            <td>第二阶段</td>
+            <td>完成横向对比与纵向趋势、规则配置后台、更丰富的图表与钻取</td>
+          </tr>
+          <tr>
+            <td>第三阶段</td>
+            <td>完成多市场扩展、更细粒度权限控制、AI 自动化工作流集成</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>总结</h4>
+      <p>本项目的核心不是“找股票”，而是“评估股票”。其设计初衷是将投资研究流程产品化、标准化、结构化，使系统从“自动筛选器”升级为“研究型评估平台”。</p>
+      <p>从设计思路上，系统围绕“方向指引、个股判断、历史对比、结果沉淀”四个关键环节展开，并采用前后端分离、异步任务、规则配置化、结果版本化的技术路线，以保证系统具备可扩展、可维护、可解释的长期能力。</p>
+      <p>从程序设计方案上，系统通过模块解耦、统一接口、结构化存储、规则版本管理、异常降级和性能优化等手段，确保既能满足当前 A 股与港股评估需求，也能为后续 AI 编程、规则迭代和多市场扩展打下稳定基础。</p>
+    </section>
+
+    <p class="footer">文档路径：<code>docs/stock_evaluation_design.html</code></p>
+  </div>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "default",
+      securityLevel: "loose",
+      flowchart: {
+        htmlLabels: true,
+        curve: "basis"
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+{
+  "rule_version": "v1.0",
+  "rule_name": "首版通用选股规则",
+  "industry_standard": "申万一级行业",
+  "pool_thresholds": {
+    "key_watch_min_score": 80.0,
+    "key_watch_top_n": 20
+  },
+  "scoring_guardrails": {
+    "min_industry_sample_for_full_percentile": 3,
+    "neutral_percentile_score": 50.0
+  },
+  "top_level_weights": {
+    "biz_quality": 0.3,
+    "growth_delivery": 0.25,
+    "financial_quality": 0.25,
+    "valuation_fit": 0.2
+  },
+  "hard_filters": {
+    "compliance": {
+      "exclude_st": true,
+      "exclude_audit_opinions": [
+        "无法表示意见",
+        "否定意见"
+      ],
+      "manual_review_audit_opinions": [
+        "保留意见"
+      ]
+    },
+    "going_concern": {
+      "nonrec_negative_years_in_3y": 2,
+      "nonrec_decline_years_in_3y": 2
+    },
+    "cashflow": {
+      "warn_ocf_lt_nonrec_np_years_in_3y": 2,
+      "exclude_cash_conversion_ratio_3y_lt": 0.6
+    },
+    "leverage": {
+      "exclude_asset_liability_ratio_gt": 0.7,
+      "warn_cash_to_short_debt_lt": 1.0
+    },
+    "liquidity": {
+      "exclude_market_cap_lt_cny": 3000000000,
+      "exclude_avg_turnover_20d_lt_cny": 30000000
+    }
+  },
+  "score_dimensions": {
+    "biz_quality": {
+      "gross_margin": 0.3,
+      "roe_avg_3y": 0.25,
+      "net_margin_avg_3y": 0.25,
+      "industry_position": 0.2
+    },
+    "growth_delivery": {
+      "revenue_cagr_3y": 0.3,
+      "nonrec_np_cagr_3y": 0.4,
+      "shareholder_return_ratio_3y": 0.3
+    },
+    "financial_quality": {
+      "cash_conversion_ratio_3y": 0.4,
+      "asset_liability_ratio_latest": 0.25,
+      "capital_return_stability": 0.35
+    },
+    "valuation_fit": {
+      "pe_ttm": 0.4,
+      "pb_latest": 0.3,
+      "dividend_yield_avg_3y": 0.3
+    }
+  },
+  "display": {
+    "show_industry_tag": true,
+    "show_industry_rank": true,
+    "industry_rank_basis": "all_stocks_in_industry"
+  },
+  "exception_policy": {
+    "invalid_metric_score": 0.0,
+    "tag_invalid_metrics": true
+  }
+}

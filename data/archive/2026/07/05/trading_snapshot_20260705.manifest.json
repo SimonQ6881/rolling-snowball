@@ -1,0 +1,515 @@
+{
+  "generated_at": "2026-07-05T12:47:39",
+  "datasets": [
+    {
+      "dataset": "zijin_df",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "daily_basic",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "moneyflow",
+      "rows": 10,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "gold_proxy_df",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "future_frames.黄金主力",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "future_frames.白银主力",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "future_frames.铜主力",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "global_index_frames.纳斯达克",
+      "rows": 123,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "global_index_frames.标普500",
+      "rows": 123,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "global_index_frames.恒生指数",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "global_index_frames.富时A50",
+      "rows": 117,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "fx_df",
+      "rows": 36,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "shibor_df",
+      "rows": 31,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "yc_df",
+      "rows": 0,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "anns",
+      "rows": 32,
+      "key": "ann_date,title",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "holder_trade",
+      "rows": 0,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "forecast",
+      "rows": 34,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "express",
+      "rows": 9,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "disclosure",
+      "rows": 74,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "fina_indicator",
+      "rows": 100,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "income",
+      "rows": 94,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "cashflow",
+      "rows": 94,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "dividend",
+      "rows": 49,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "precious_frames.黄金主力",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "precious_frames.铜主力",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "precious_frames.锂指数代理",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "theme_frames.AI",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "theme_frames.芯片",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "theme_frames.通信",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "theme_frames.电力",
+      "rows": 118,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "dollar_index_df",
+      "rows": 0,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "treasury_curve_df",
+      "rows": 126,
+      "key": "trade_date",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "research_entries",
+      "rows": 12,
+      "key": "record_id",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "research_alerts",
+      "rows": 0,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "policy_entries",
+      "rows": 5,
+      "key": "record_key",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "central_bank_gold_entries",
+      "rows": 8,
+      "key": "record_key",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    },
+    {
+      "dataset": "boe_rate_df",
+      "rows": 0,
+      "key": "",
+      "missing_count": 0,
+      "duplicate_count": 0,
+      "valid": true
+    }
+  ],
+  "status_rows": [
+    {
+      "name": "紫金矿业日线",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "紫金矿业每日指标",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "紫金矿业资金流",
+      "ok": true,
+      "detail": "10 rows"
+    },
+    {
+      "name": "黄金ETF代理",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "黄金主力日线",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "白银主力日线",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "铜主力日线",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "上证综指指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "沪深300指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "深证成指指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "纳斯达克国际指数",
+      "ok": true,
+      "detail": "123 rows"
+    },
+    {
+      "name": "标普500国际指数",
+      "ok": true,
+      "detail": "123 rows"
+    },
+    {
+      "name": "恒生指数国际指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "富时A50国际指数",
+      "ok": true,
+      "detail": "117 rows"
+    },
+    {
+      "name": "美元兑离岸人民币",
+      "ok": true,
+      "detail": "36 rows"
+    },
+    {
+      "name": "SHIBOR利率",
+      "ok": true,
+      "detail": "31 rows"
+    },
+    {
+      "name": "中债收益率曲线",
+      "ok": false,
+      "detail": "抱歉，您没有接口(yc_cb)访问权限，权限的具体详情访问：https://tushare.pro/document/1?doc_id=108。"
+    },
+    {
+      "name": "紫金矿业公告",
+      "ok": true,
+      "detail": "32 rows"
+    },
+    {
+      "name": "紫金矿业股东增减持",
+      "ok": true,
+      "detail": "0 rows"
+    },
+    {
+      "name": "紫金矿业业绩预告",
+      "ok": true,
+      "detail": "34 rows"
+    },
+    {
+      "name": "紫金矿业业绩快报",
+      "ok": true,
+      "detail": "9 rows"
+    },
+    {
+      "name": "紫金矿业披露计划",
+      "ok": true,
+      "detail": "74 rows"
+    },
+    {
+      "name": "紫金矿业财务指标",
+      "ok": true,
+      "detail": "100 rows"
+    },
+    {
+      "name": "紫金矿业利润表",
+      "ok": true,
+      "detail": "94 rows"
+    },
+    {
+      "name": "紫金矿业现金流",
+      "ok": true,
+      "detail": "94 rows"
+    },
+    {
+      "name": "紫金矿业分红",
+      "ok": true,
+      "detail": "49 rows"
+    },
+    {
+      "name": "东财快讯",
+      "ok": true,
+      "detail": "151 rows"
+    },
+    {
+      "name": "黄金主力扩展行情",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "铜主力扩展行情",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "锂指数代理主题指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "AI赛道指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "芯片赛道指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "通信赛道指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "电力赛道指数",
+      "ok": true,
+      "detail": "118 rows"
+    },
+    {
+      "name": "美元指数代理(FRED)",
+      "ok": false,
+      "detail": "The read operation timed out"
+    },
+    {
+      "name": "美国国债收益率曲线",
+      "ok": true,
+      "detail": "126 rows"
+    },
+    {
+      "name": "紫金矿业机构研报",
+      "ok": true,
+      "detail": "101 rows"
+    },
+    {
+      "name": "美联储政策事件",
+      "ok": true,
+      "detail": "3 items"
+    },
+    {
+      "name": "日本央行政策事件",
+      "ok": true,
+      "detail": "2 items"
+    },
+    {
+      "name": "英国央行政策事件",
+      "ok": true,
+      "detail": "0 items"
+    },
+    {
+      "name": "全球央行购金月报",
+      "ok": true,
+      "detail": "8 items"
+    },
+    {
+      "name": "英国央行利率历史",
+      "ok": true,
+      "detail": "0 rows"
+    }
+  ],
+  "integrity_ok": true,
+  "invalid_datasets": []
+}
