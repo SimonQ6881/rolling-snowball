@@ -133,10 +133,15 @@ describe('TaskPage', () => {
     )
 
     await waitFor(() => {
+      expect(screen.getByRole('heading', { name: '任务运行' })).toBeInTheDocument()
+      expect(screen.getByText('最近 1 条')).toBeInTheDocument()
+      expect(screen.getByText('状态与结果入口')).toBeInTheDocument()
       expect(screen.getByText('task-demo-001')).toBeInTheDocument()
       expect(screen.getByText('最近任务 · task-demo-001')).toBeInTheDocument()
-      expect(screen.getByRole('link', { name: '查看本次结果' })).toHaveAttribute('href', '/?run=run-demo-001')
+      expect(screen.getByRole('link', { name: '打开首页摘要' })).toHaveAttribute('href', '/?run=run-demo-001')
+      expect(screen.getByRole('link', { name: '打开股票列表' })).toHaveAttribute('href', '/stocks?run=run-demo-001')
       expect(screen.getByRole('heading', { name: '本次 run 摘要' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: '执行日志' })).toBeInTheDocument()
       expect(screen.getByText('通过硬过滤')).toBeInTheDocument()
       expect(screen.getByText('以下参数就是这次 run 实际使用的规则快照。')).toBeInTheDocument()
       expect(screen.getByText('重点观察池名额')).toBeInTheDocument()

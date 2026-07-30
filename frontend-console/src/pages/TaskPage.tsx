@@ -26,6 +26,14 @@ function getTaskTone(status: TaskStatus['task_status']) {
   return 'amber'
 }
 
+const primaryLinkClass =
+  'inline-flex rounded-full border border-sky-200 bg-sky-50 px-5 py-3 text-sm font-semibold text-sky-700 transition hover:border-sky-300 hover:bg-sky-100'
+
+const secondaryLinkClass =
+  'inline-flex rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-white'
+
+const taskListItemBaseClass = 'block rounded-[24px] border px-4 py-4 transition'
+
 export default function TaskPage() {
   const { taskId = 'latest' } = useParams()
   const [tasks, setTasks] = useState<TaskStatus[]>([])
@@ -101,19 +109,19 @@ export default function TaskPage() {
         <>
           <Link
             to="/runs"
-            className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
+        className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
           >
             历史运行
           </Link>
           <Link
             to="/tasks/latest"
-            className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
+        className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
           >
             最近任务
           </Link>
           <Link
             to="/lab"
-            className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300/40 hover:bg-cyan-300/15"
+        className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-700 transition hover:border-sky-300 hover:bg-sky-100"
           >
             发起新运行
           </Link>
@@ -122,11 +130,11 @@ export default function TaskPage() {
     >
       {loading ? (
         <div className="grid gap-6 xl:grid-cols-[0.7fr_1.3fr]">
-          <div className="h-[520px] animate-pulse rounded-[30px] bg-white/[0.05]" />
-          <div className="h-[520px] animate-pulse rounded-[30px] bg-white/[0.05]" />
+          <div className="h-[520px] animate-pulse rounded-[30px] bg-white/70 shadow-[0_16px_36px_rgba(15,23,42,0.05)]" />
+          <div className="h-[520px] animate-pulse rounded-[30px] bg-white/70 shadow-[0_16px_36px_rgba(15,23,42,0.05)]" />
         </div>
       ) : (
-        <div className="grid gap-6 xl:grid-cols-[0.7fr_1.3fr]">
+        <div className="grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
           <Panel eyebrow="最近任务" title={`最近 ${tasks.length} 条`}>
             {tasks.length > 0 ? (
               <div className="space-y-3">
@@ -135,26 +143,26 @@ export default function TaskPage() {
                     key={item.task_id}
                     to={`/tasks/${item.task_id}`}
                     className={[
-                      'block rounded-[22px] border px-4 py-4 transition',
+                      taskListItemBaseClass,
                       item.task_id === activeTaskId
-                        ? 'border-cyan-300/35 bg-cyan-300/[0.08]'
-                        : 'border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]',
+                        ? 'border-sky-200 bg-sky-50 shadow-[0_16px_36px_rgba(14,165,233,0.10)]'
+                        : 'border-slate-200 bg-slate-50/70 hover:border-slate-300 hover:bg-white',
                     ].join(' ')}
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       <StatusPill tone={getTaskTone(item.task_status)}>{item.task_status}</StatusPill>
                       <StatusPill tone="slate">{stageLabelMap[item.progress_stage || ''] || item.progress_stage || 'waiting'}</StatusPill>
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-white">{item.task_id}</p>
-                    <p className="mt-2 text-xs text-slate-400">
+                    <p className="mt-3 text-sm font-semibold text-slate-950">{item.task_id}</p>
+                    <p className="mt-2 text-xs text-slate-500">
                       {formatDateTime(item.created_at)} · {item.apply_mode} · {item.run_id || 'run 待生成'}
                     </p>
-                    <p className="mt-3 text-sm leading-6 text-slate-400">{item.latest_message || '等待任务写入最新状态。'}</p>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">{item.latest_message || '等待任务写入最新状态。'}</p>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="rounded-[22px] border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm leading-7 text-slate-400">
+              <div className="rounded-[22px] border border-dashed border-slate-200 bg-slate-50/80 p-6 text-sm leading-7 text-slate-600">
                 还没有任务记录。先去规则实验台发起一次运行，这里就会自动沉淀最近任务历史。
               </div>
             )}
@@ -162,15 +170,21 @@ export default function TaskPage() {
 
           {error ? (
             <Panel eyebrow="任务加载失败" title="暂时无法读取任务状态">
-              <div className="rounded-[22px] border border-rose-400/20 bg-rose-400/10 p-5 text-sm text-rose-100">{error}</div>
+              <div className="rounded-[22px] border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">{error}</div>
             </Panel>
           ) : !task ? (
             <Panel eyebrow="等待任务" title="还没有可查看的任务">
-              <p className="text-sm leading-7 text-slate-400">当前没有任务详情可展示。发起一次新运行后，这里会显示进度、日志和结果入口。</p>
+              <p className="text-sm leading-7 text-slate-600">当前没有任务详情可展示。发起一次新运行后，这里会显示进度、日志和结果入口。</p>
             </Panel>
           ) : (
             <div className="space-y-6">
-              <Panel eyebrow="任务状态" title={summaryTitle}>
+              <Panel eyebrow="Task Summary" title="状态与结果入口">
+                <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/90 p-4">
+                  <p className="text-xs uppercase tracking-[0.22em] text-slate-500">当前任务</p>
+                  <p className="mt-2 text-sm font-semibold text-slate-950">{summaryTitle}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">先确认任务状态、阶段与结果入口，再决定是否继续查看 run 摘要或回到实验台。</p>
+                </div>
+
                 <div className="flex flex-wrap gap-2">
                   <StatusPill tone={getTaskTone(task.task_status)}>{task.task_status}</StatusPill>
                   <StatusPill tone="slate">{stageLabelMap[task.progress_stage || ''] || task.progress_stage || 'waiting'}</StatusPill>
@@ -185,7 +199,7 @@ export default function TaskPage() {
                 </div>
 
                 {task.error_message ? (
-                  <div className="mt-5 rounded-[22px] border border-rose-400/20 bg-rose-400/10 p-5 text-sm leading-7 text-rose-100">
+                  <div className="mt-5 rounded-[22px] border border-rose-200 bg-rose-50 p-5 text-sm leading-7 text-rose-700">
                     <p className="font-semibold">失败原因</p>
                     <p className="mt-2">{task.error_message}</p>
                   </div>
@@ -194,43 +208,28 @@ export default function TaskPage() {
                 <div className="mt-6 flex flex-wrap gap-3">
                   {task.run_id ? (
                     <>
-                      <Link
-                        to={`/?run=${task.run_id}`}
-                        className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300/40 hover:bg-cyan-300/15"
-                      >
-                        查看本次结果
+                      <Link to={`/?run=${task.run_id}`} className={primaryLinkClass}>
+                        打开首页摘要
                       </Link>
-                      <Link
-                        to={`/stocks?run=${task.run_id}`}
-                        className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
-                      >
-                        查看股票列表
+                      <Link to={`/stocks?run=${task.run_id}`} className={secondaryLinkClass}>
+                        打开股票列表
                       </Link>
-                      <Link
-                        to={`/industries?run=${task.run_id}`}
-                        className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
-                      >
-                        查看行业看板
+                      <Link to={`/industries?run=${task.run_id}`} className={secondaryLinkClass}>
+                        打开行业看板
                       </Link>
-                      <Link
-                        to="/runs"
-                        className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
-                      >
-                        查看历史运行
+                      <Link to="/runs" className={secondaryLinkClass}>
+                        打开历史运行
                       </Link>
                     </>
                   ) : null}
-                  <Link
-                    to="/lab"
-                    className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"
-                  >
+                  <Link to="/lab" className={secondaryLinkClass}>
                     返回规则实验台
                   </Link>
                 </div>
               </Panel>
 
               {task.run_id ? (
-                <Panel eyebrow="产出结果" title="本次 run 摘要">
+                <Panel eyebrow="Run Output" title="本次 run 摘要">
                   {runSummary ? (
                     <>
                       <div className="flex flex-wrap gap-2">
@@ -258,7 +257,7 @@ export default function TaskPage() {
                     </>
                   ) : (
                     <div className="space-y-4">
-                      <div className="rounded-[22px] border border-dashed border-white/10 bg-white/[0.02] p-5 text-sm leading-7 text-slate-400">
+                      <div className="rounded-[22px] border border-dashed border-slate-200 bg-slate-50/80 p-5 text-sm leading-7 text-slate-600">
                         当前任务已经拿到了 `run_id`，但暂时没有查到对应的运行摘要。通常说明这是较早的历史记录，或者这次 run 还没有完整摘要可读。
                       </div>
                       <RuleSnapshotSummary
@@ -272,8 +271,8 @@ export default function TaskPage() {
                 </Panel>
               ) : null}
 
-              <Panel eyebrow="实时日志" title="任务日志流">
-                <div className="max-h-[560px] overflow-auto rounded-[24px] border border-white/10 bg-[#050b12] p-4 font-mono text-xs leading-6 text-slate-300">
+              <Panel eyebrow="Logs" title="执行日志">
+                <div className="max-h-[560px] overflow-auto rounded-[24px] border border-slate-200 bg-slate-950 p-4 font-mono text-xs leading-6 text-slate-200">
                   {logs.length > 0 ? (
                     logs.map((line) => <div key={line}>{line}</div>)
                   ) : (

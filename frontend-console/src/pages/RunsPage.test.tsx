@@ -115,11 +115,15 @@ describe('RunsPage', () => {
     )
 
     await waitFor(() => {
+      expect(screen.getByRole('heading', { name: '历史运行' })).toBeInTheDocument()
+      expect(screen.getByText('运行快照')).toBeInTheDocument()
+      expect(screen.getByText('结果入口')).toBeInTheDocument()
       expect(screen.getByText('run-demo-001')).toBeInTheDocument()
       expect(screen.getByText('task-demo-001')).toBeInTheDocument()
       expect(screen.getByText('run_once')).toBeInTheDocument()
-      expect(screen.getByRole('link', { name: '查看首页视图' })).toHaveAttribute('href', '/?run=run-demo-001')
+      expect(screen.getByRole('link', { name: '打开首页摘要' })).toHaveAttribute('href', '/?run=run-demo-001')
       expect(screen.getByRole('link', { name: 'Run 质量总览' })).toHaveAttribute('href', '/run-review?run=run-demo-001')
+      expect(screen.getByRole('link', { name: '打开股票列表' })).toHaveAttribute('href', '/stocks?run=run-demo-001')
       expect(screen.getByText('以下参数就是这次 run 实际使用的规则快照。')).toBeInTheDocument()
       expect(screen.getByText('重点观察池名额')).toBeInTheDocument()
     })
