@@ -74,8 +74,10 @@ describe('StocksPage', () => {
 
     await waitFor(() => {
       expect(getRunStocks).toHaveBeenCalledWith('run-demo-002', expect.stringContaining('industry=%E7%94%B5%E5%AD%90'))
+      expect(screen.getByText('当前 run 与筛选摘要')).toBeInTheDocument()
+      expect(screen.getByText('过滤舱')).toBeInTheDocument()
       expect(screen.getByText('深科技')).toBeInTheDocument()
-      expect(screen.getByText('行业 电子')).toBeInTheDocument()
+      expect(screen.getAllByText('行业 电子').length).toBeGreaterThan(0)
     })
   })
 
@@ -120,6 +122,7 @@ describe('StocksPage', () => {
     )
 
     await waitFor(() => {
+      expect(screen.getByText('当前 run 与筛选摘要')).toBeInTheDocument()
       expect(screen.getByText(/这次 `run` 有汇总结果，但没有逐股历史明细/)).toBeInTheDocument()
     })
   })

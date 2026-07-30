@@ -60,11 +60,10 @@ describe('Home', () => {
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: '重点观察池' })).toBeInTheDocument()
+      expect(screen.getByText('本次最值得优先看的 run 结果与研究入口。')).toBeInTheDocument()
       expect(screen.getByText('美的集团')).toBeInTheDocument()
-      expect(screen.getByText('run-demo-001')).toBeInTheDocument()
-      const keyWatchLinks = screen.getAllByRole('link', { name: '重点观察池' })
-      expect(keyWatchLinks.some((link) => link.getAttribute('href') === '/stocks?run=run-demo-001&pool=%E9%87%8D%E7%82%B9%E8%A7%82%E5%AF%9F%E6%B1%A0')).toBe(true)
-      expect(screen.getByRole('link', { name: '仅已过滤' })).toHaveAttribute('href', '/stocks?run=run-demo-001&filtered=true')
+      expect(screen.getByRole('link', { name: '查看全股票列表' })).toHaveAttribute('href', '/stocks?run=run-demo-001')
+      expect(screen.getByText('先看这次最值得研究的 20 只')).toBeInTheDocument()
     })
   })
 })
