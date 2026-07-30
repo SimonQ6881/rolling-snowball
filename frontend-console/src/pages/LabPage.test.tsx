@@ -82,12 +82,18 @@ describe('LabPage', () => {
     })
   })
 
-  it('shows clean state first and highlights changed fields', async () => {
+  it('shows cockpit summary, validation, and submit panels and highlights changed fields', async () => {
     renderPage()
 
     await waitFor(() => {
+      expect(screen.getByRole('heading', { name: '本次改动摘要' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: '当前校验状态' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: '运行与保存' })).toBeInTheDocument()
       expect(screen.getAllByText('当前与默认规则一致').length).toBeGreaterThan(0)
       expect(screen.getAllByText('当前字段均合法').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('当前规则版本').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('默认规则 v1.0').length).toBeGreaterThan(0)
+      expect(screen.getByRole('button', { name: '仅本次生效并运行' })).toBeInTheDocument()
     })
 
     fireEvent.change(screen.getByLabelText('现金转化率下限'), {
